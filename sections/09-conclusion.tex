@@ -1,0 +1,38 @@
+\section{Conclusions}
+\label{s:conclusion}
+%The presented approach...
+In this paper, we have described our workflow and implementation for the semi-automatic detection, extraction, and analysis of code list structures embedded in OWL ontologies. 
+%In this paper, we have showcased our experimental approach and our 
+The implementation is primarily based on SPARQL queries.
+%for the detection and analysis of code list structures in the chosen knowledge base LOV. 
+As input material we chose the collection of ontologies indexed in the LOV catalog.
+The tool is freely accessible, and so is also the result of its run on the LOV resource.
+
+%Next, we have discussed the motivation for analyzing each structural part of the RDF knowledge representation including a brief comparison for these structural parts from our point of view.
+The design of the queries was informed by a comprehensive analysis of possible patterns that could express the general notion of code list in OWL.
+Looking at the semantics of code lists, we identified the phenomenon of individuals frequently representing ontological universals. 
+This led us to a contextual, qualitative study of alternative ways the designers can choose to represent concepts (universals).
+We consequently focused on code lists represented as sets of syntactic individuals embedded in vocabularies in the LOV database.
+Under this optic, we also carried out a complementary bottom-up analysis of all such individuals, quantified their position in a multi-dimensional space of features, and qualitatively analysed the different cases.
+
+%Lastly, we have provided results achieved from our workflow, revealing a comprehensive collection of statistical information involving code list occurrences and their structure in LOV.
+
+%Since the research is a part of a larger effort in studying the interplay of concept modeling in `hybrid' representations, having concepts (universals) as classes, code list individuals and possibly even `knowledge-graph-style' individuals, in a single (though, modular) knowledge base, the introductory part of the paper also provided a broader view of this modeling landscape.
+
+We are aware of limitations of our approach, which we aim to overcome in our future work.
+Foremost, while the individuals embedded in ontologies were a relatively easy target, they only represent a fraction of structures potentially usable as stand-alone, SKOS-conformant code lists on the Semantic Web.
+We assume that a further wealth of code list structures could be obtained by transformation from classes, and possibly also by extraction from large knowledge graphs. 
+This will however require additional patterns to be formulated and tested, and it might be hard to reach satisfactory accuracy.
+Furthermore, while we believe that the final result produced by our workflow, namely, a dataset of stand-alone code lists, will find its consumers, we have not yet elaborated techniques by which data and knowledge engineers could be informed about the existence of a code list satisfying their needs. 
+The practice of communities that routinely handle code lists (even beyond the Semantic Web), such as librarians or public officers, should be studied in order to offer them a mechanism to retrieve code lists built on the basis of ontologies and knowledge graphs, and this way interconnect them to the Semantic Web effort.
+
+%Our future work will focus on: (1) querying and analyzing additional open knowledge graphs with an available SPARQL endpoints found in SPARQLES \cite{DBLP:journals/semweb/VandenbusscheUM17} or other datasets; (2) the ontological analysis of the meaning of codes, namely how often they correspond to ontological universals or particulars; (3) the lexical analysis of patterns within the embedded code list structure wrt their overarching class and the property they provided values for; (4) and finding the motivations for incorporating code lists into the Semantic Web rather than preserving an ontology-instance knowledge graph dichotomy.
+
+%%
+%% The acknowledgments section is defined using the "acks" environment
+%% (and NOT an unnumbered section). This ensures the proper
+%% identification of the section in the article metadata, and the
+%% consistent spelling of the heading.
+\section*{Acknowledgement}
+This research was supported from the institutional-support fund for long-term conceptual development of science and research at the Faculty of Informatics and Statistics of the Prague University of Economics and Business (IP400040), and by the project IGA V\v{S}E \textnumero\ F4/33/2019.
+

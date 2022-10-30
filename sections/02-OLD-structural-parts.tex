@@ -1,0 +1,56 @@
+\section{Structural parts of the RDF knowledge representation}
+\label{sections/02-structural-parts}
+In the last several years of the evolution of the Semantic Web, we have been able to observe several main forms of knowledge representations that are distinguished into ontology schemas, code lists, and knowledge graphs. All of these knowledge representations can be used separately or in combinations, supplementing each other. Together with the used tools and engines, they form an ensemble used to provide data for further applications in a domain of interest. This is commonly referred to as \textit{knowledge base} where in certain scenarios they could be referred to as \textit{hybrid} knowledge base because of the fact that they incorporate more than one of the above-mentioned structural parts.
+%knowledge representations.
+
+In the following subsections, we talk about the descriptions of the mentioned knowledge representations known from the state of the art as well as from our research's point of view. Additionally, we describe the main differences between them.
+
+\subsection{Ontology schemas} 
+The RDF knowledge bases often, but not always, rely on formal definitions and schemas that can provide for a better contextual access. These formal definitions are mostly codified as \textit{ontologies} using an ontology language such as OWL \cite{mcguinness2004owl}, alternatively using constraints, e.g., in SHACL \cite{knublauch2017shapes}. An ontology is usually used to describe a specific domain, for which it should include the abstraction of domain-specific concepts and relationships in between, while explicitly listing out object and data properties. For multi-domain knowledge bases and especially data integration, the role of ontologies is even more important as it provides the human- and machine-readable context for exploring knowledge data.
+%in a more structured way.
+Ontologies operate on a level that is more abstract. They encompass the specifications of shared conceptualization in a specific domain of the area of our interest. In summary, from our point of view, ontologies should:
+\begin{enumerate}
+    \item be defined in a formal description language, e.g., OWL,
+    \item be focused on and bounded by a domain of knowledge and the community which has agreed upon that specification,
+    \item provide a set of axioms which involve classes, relationships, instances, attributes, rules, restrictions, and metadata,
+    \item have a rigorous, dynamic and hierarchical structure of terms, which provides the inference on relationships,
+    \item serve as a conceptual data model which generalizes instances and gives the data a context and meaning.
+\end{enumerate}
+
+\subsection{Code lists} 
+In knowledge bases, we can often find flatter, sometimes hierarchical structures of data which we identify as \textit{code lists}. Code lists usually create a structure that makes use of SKOS's ConceptScheme % or Collection
+\cite{data_cube}. Also, a significant part of Europe's fiscal linked open data, which is widely published by governments and municipalities, can be viewed as an example of origins for the usage of code lists \cite{DBLP:conf/icwe/MusyaffaHLOJAV18}. These code lists serve as reference lists of terms or concepts, which are similar to an enumeration or dictionary. They contain strictly defined rigid terms, such as budget concepts \cite{DBLP:conf/smap/FilippidisKKIB16}. They serve as a predefined list, which can be referenced by other concepts and instances, or they can act as linking entities between datasets from different backgrounds to facilitate their comparison, even in the international context \cite{DBLP:conf/smap/FilippidisKKIB16}. The data properties of these code list members will then provide an additional context to the concepts that refer to them. %In terms of sharability and interoperability, code lists provide the most suitable structure and can be widely used across different systems.
+
+\subsection{Knowledge graphs}
+This is a term originally coined by Google to describe their specialized knowledge base that is used to find useful information related to an entity. In recent research, many definitions have been proposed for the term \textit{knowledge graph} . For example: 
+
+\begin{enumerate}
+
+    \item A knowledge graph is a graph-theoretic \textit{knowledge representation} that (at its simplest version) models entities and attribute values as nodes, and relationships and attributes as labeled directed edges \cite{kg_swj_issue}.
+
+    \item A knowledge graph is a graph-based collection of data entities and their mutual relationships. It defines possible classes and relationships between data entities in a schema-like document. It facilitates potential connections between entities and covers several domains of interest \cite{DBLP:journals/semweb/Paulheim17}.
+
+    \item A knowledge graph is an RDF graph, i.e., a set of RDF triples where each triple is an ordered sequence of the following terms: subject, predicate, and object. Every RDF term is an URI, a blank node or a literal value \cite{DBLP:journals/semweb/FarberBMR18}.
+
+    \item A knowledge graph is a system which incorporates a range of techniques for the extraction of new knowledge from the web in the form of facts. These facts are connected using relationships; therefore it is called a knowledge graph \cite{DBLP:conf/semweb/PujaraMGC13}.
+
+    \item A knowledge graph is a network of entities, their semantic types, properties and relationships between them.
+
+    \item A knowledge graph is a network of relevant things in a specific domain or organization. It is not limited to abstract concepts and relations, and can contain objects such as documents and data sets.
+
+    \item A knowledge graph collects and integrates information to an ontology and, using a reasoner, infers additional knowledge.
+
+    \item A knowledge graph is a graph-theoretic \textit{knowledge representation} that (at its simplest) models entities and attribute values as nodes, and relationships and attributes as labeled, directed edges \cite{kg_swj_issue}.
+
+\end{enumerate}
+
+We understand knowledge graphs as a form of data storage that also provides arbitrary access. In certain scenarios, they can be understood as a result of the extraction of knowledge from the web in the form of facts. To effectively share knowledge between systems, however, the modeling of terms and concepts on the abstract level is needed to provide contextual information. In terms of knowledge representations, we identify knowledge graphs as a part of the entire knowledge base. They usually consist of class instances or data instances without classes, thus forming a less organized structure of data storage.
+
+\subsection{Similarities and differences}
+From the point of view of our research, the main difference between the described knowledge representations is given by their organizing structures. 
+
+An ontology schema consists of associated terms and definitions of their relationships. Together they form a structure that resembles a complex network of interconnected (edges) concepts (nodes), which are usually organized into multiple levels of hierarchies, sometimes objectionably cyclical, with rigorous semantics in the form of axioms. They tend to be stable due to the fact that they encompass high-level generalizations or abstractions of the domain knowledge. In ontology schemas, it is not common to change or remove existing edges but, instead, adding nodes is the usual means for its evolution.
+
+Code lists mainly consist of individuals on the instance level, i.e., instance of a class concept, that form a simple system of concepts related to a super concept. These concepts are lined up under one specific subject, and thus become a structure that resembles enumeration of a type. Also, they can sometimes be hierarchically structured or form a taxonomy of related concepts, but they always have a high degree of consistency and are characterized by their simplicity with little to no drawbacks. This also explains their high level of interoperability.
+
+In contrast to code lists and ontology schemas, knowledge graphs represent a more open structure and provide the most flexible representation of knowledge where no ontology schema or vocabulary is needed (although it is probably  nice to have it since it enables a better access to data). If this is the case, they become highly non-hierarchical and form a large network of interconnected data to which new knowledge can be added in an arbitrary manner.

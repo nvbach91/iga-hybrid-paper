@@ -1,0 +1,669 @@
+%%% ====================================================================
+%%%  BibTeX-file{
+%%%     author          = "Gerry Murray",
+%%%     version         = "1.2",
+%%%     date            = "2 April 2012",
+%%%     filename        = "acmsmall-sample-bibfile.bib",
+%%%     address         = "ACM, NY",
+%%%     email           = "murray at hq.acm.org",
+%%%     codetable       = "ISO/ASCII",
+%%%     keywords        = "ACM Reference Format, bibliography, citation, references",
+%%%     supported       = "yes",
+%%%     docstring       = "This BibTeX database file contains 'bibdata' entries
+%%%                        that 'match' the examples provided in the Specifications Document
+%%%                        AND, also, 'legacy'-type bibs. It should assist authors in
+%%%                        choosing the 'correct' at-bibtype and necessary bib-fields
+%%%                        so as to obtain the appropriate ACM Reference Format output.
+%%%                        It also contains many 'Standard Abbreviations'. "
+%%%  }
+%%% ====================================================================
+
+% Journals
+
+% First the Full Name is given, then the abbreviation used in the AMS Math
+% Reviews, with an indication if it could not be found there.
+% Note the 2nd overwrites the 1st, so swap them if you want the full name.
+
+ %{AMS}
+ @String{AMSTrans = "American Mathematical Society Translations" }
+ @String{AMSTrans = "Amer. Math. Soc. Transl." }
+ @String{BullAMS = "Bulletin of the American Mathematical Society" }
+ @String{BullAMS = "Bull. Amer. Math. Soc." }
+ @String{ProcAMS = "Proceedings of the American Mathematical Society" }
+ @String{ProcAMS = "Proc. Amer. Math. Soc." }
+ @String{TransAMS = "Transactions of the American Mathematical Society" }
+ @String{TransAMS = "Trans. Amer. Math. Soc." }
+
+ %ACM
+ @String{CACM = "Communications of the {ACM}" }
+ @String{CACM = "Commun. {ACM}" }
+ @String{CompServ = "Comput. Surveys" }
+ @String{JACM = "J. ACM" }
+ @String{ACMMathSoft = "{ACM} Transactions on Mathematical Software" }
+ @String{ACMMathSoft = "{ACM} Trans. Math. Software" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newsletter" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newslett." }
+
+ @String{AmerSocio = "American Journal of Sociology" }
+ @String{AmerStatAssoc = "Journal of the American Statistical Association" }
+ @String{AmerStatAssoc = "J. Amer. Statist. Assoc." }
+ @String{ApplMathComp = "Applied Mathematics and Computation" }
+ @String{ApplMathComp = "Appl. Math. Comput." }
+ @String{AmerMathMonthly = "American Mathematical Monthly" }
+ @String{AmerMathMonthly = "Amer. Math. Monthly" }
+ @String{BIT = "{BIT}" }
+ @String{BritStatPsych = "British Journal of Mathematical and Statistical
+          Psychology" }
+ @String{BritStatPsych = "Brit. J. Math. Statist. Psych." }
+ @String{CanMathBull = "Canadian Mathematical Bulletin" }
+ @String{CanMathBull = "Canad. Math. Bull." }
+ @String{CompApplMath = "Journal of Computational and Applied Mathematics" }
+ @String{CompApplMath = "J. Comput. Appl. Math." }
+ @String{CompPhys = "Journal of Computational Physics" }
+ @String{CompPhys = "J. Comput. Phys." }
+ @String{CompStruct = "Computers and Structures" }
+ @String{CompStruct = "Comput. \& Structures" }
+ @String{CompJour = "The Computer Journal" }
+ @String{CompJour = "Comput. J." }
+ @String{CompSysSci = "Journal of Computer and System Sciences" }
+ @String{CompSysSci = "J. Comput. System Sci." }
+ @String{Computing = "Computing" }
+ @String{ContempMath = "Contemporary Mathematics" }
+ @String{ContempMath = "Contemp. Math." }
+ @String{Crelle = "Crelle's Journal" }
+ @String{GiornaleMath = "Giornale di Mathematiche" }
+ @String{GiornaleMath = "Giorn. Mat." } % didn't find in AMS MR., ibid.
+
+ %IEEE
+ @String{Computer = "{IEEE} Computer" }
+ @String{IEEETransComp = "{IEEE} Transactions on Computers" }
+ @String{IEEETransComp = "{IEEE} Trans. Comput." }
+ @String{IEEETransAC = "{IEEE} Transactions on Automatic Control" }
+ @String{IEEETransAC = "{IEEE} Trans. Automat. Control" }
+ @String{IEEESpec = "{IEEE} Spectrum" } % didn't find in AMS MR
+ @String{ProcIEEE = "Proceedings of the {IEEE}" }
+ @String{ProcIEEE = "Proc. {IEEE}" } % didn't find in AMS MR
+ @String{IEEETransAeroElec = "{IEEE} Transactions on Aerospace and Electronic
+     Systems" }
+ @String{IEEETransAeroElec = "{IEEE} Trans. Aerospace Electron. Systems" }
+
+ @String{IMANumerAna = "{IMA} Journal of Numerical Analysis" }
+ @String{IMANumerAna = "{IMA} J. Numer. Anal." }
+ @String{InfProcLet = "Information Processing Letters" }
+ @String{InfProcLet = "Inform. Process. Lett." }
+ @String{InstMathApp = "Journal of the Institute of Mathematics and
+     its Applications" }
+ @String{InstMathApp = "J. Inst. Math. Appl." }
+ @String{IntControl = "International Journal of Control" }
+ @String{IntControl = "Internat. J. Control" }
+ @String{IntNumerEng = "International Journal for Numerical Methods in
+     Engineering" }
+ @String{IntNumerEng = "Internat. J. Numer. Methods Engrg." }
+ @String{IntSuper = "International Journal of Supercomputing Applications" }
+ @String{IntSuper = "Internat. J. Supercomputing Applic." } % didn't find
+%% in AMS MR
+ @String{Kibernetika = "Kibernetika" }
+ @String{JResNatBurStand = "Journal of Research of the National Bureau
+     of Standards" }
+ @String{JResNatBurStand = "J. Res. Nat. Bur. Standards" }
+ @String{LinAlgApp = "Linear Algebra and its Applications" }
+ @String{LinAlgApp = "Linear Algebra Appl." }
+ @String{MathAnaAppl = "Journal of Mathematical Analysis and Applications" }
+ @String{MathAnaAppl = "J. Math. Anal. Appl." }
+ @String{MathAnnalen = "Mathematische Annalen" }
+ @String{MathAnnalen = "Math. Ann." }
+ @String{MathPhys = "Journal of Mathematical Physics" }
+ @String{MathPhys = "J. Math. Phys." }
+ @String{MathComp = "Mathematics of Computation" }
+ @String{MathComp = "Math. Comp." }
+ @String{MathScand = "Mathematica Scandinavica" }
+ @String{MathScand = "Math. Scand." }
+ @String{TablesAidsComp = "Mathematical Tables and Other Aids to Computation" }
+ @String{TablesAidsComp = "Math. Tables Aids Comput." }
+ @String{NumerMath = "Numerische Mathematik" }
+ @String{NumerMath = "Numer. Math." }
+ @String{PacificMath = "Pacific Journal of Mathematics" }
+ @String{PacificMath = "Pacific J. Math." }
+ @String{ParDistComp = "Journal of Parallel and Distributed Computing" }
+ @String{ParDistComp = "J. Parallel and Distrib. Comput." } % didn't find
+%% in AMS MR
+ @String{ParComputing = "Parallel Computing" }
+ @String{ParComputing = "Parallel Comput." }
+ @String{PhilMag = "Philosophical Magazine" }
+ @String{PhilMag = "Philos. Mag." }
+ @String{ProcNAS = "Proceedings of the National Academy of Sciences
+                    of the USA" }
+ @String{ProcNAS = "Proc. Nat. Acad. Sci. U. S. A." }
+ @String{Psychometrika = "Psychometrika" }
+ @String{QuartMath = "Quarterly Journal of Mathematics, Oxford, Series (2)" }
+ @String{QuartMath = "Quart. J. Math. Oxford Ser. (2)" }
+ @String{QuartApplMath = "Quarterly of Applied Mathematics" }
+ @String{QuartApplMath = "Quart. Appl. Math." }
+ @String{RevueInstStat = "Review of the International Statisical Institute" }
+ @String{RevueInstStat = "Rev. Inst. Internat. Statist." }
+
+ %SIAM
+ @String{JSIAM = "Journal of the Society for Industrial and Applied
+     Mathematics" }
+ @String{JSIAM = "J. Soc. Indust. Appl. Math." }
+ @String{JSIAMB = "Journal of the Society for Industrial and Applied
+     Mathematics, Series B, Numerical Analysis" }
+ @String{JSIAMB = "J. Soc. Indust. Appl. Math. Ser. B Numer. Anal." }
+ @String{SIAMAlgMeth = "{SIAM} Journal on Algebraic and Discrete Methods" }
+ @String{SIAMAlgMeth = "{SIAM} J. Algebraic Discrete Methods" }
+ @String{SIAMAppMath = "{SIAM} Journal on Applied Mathematics" }
+ @String{SIAMAppMath = "{SIAM} J. Appl. Math." }
+ @String{SIAMComp = "{SIAM} Journal on Computing" }
+ @String{SIAMComp = "{SIAM} J. Comput." }
+ @String{SIAMMatrix = "{SIAM} Journal on Matrix Analysis and Applications" }
+ @String{SIAMMatrix = "{SIAM} J. Matrix Anal. Appl." }
+ @String{SIAMNumAnal = "{SIAM} Journal on Numerical Analysis" }
+ @String{SIAMNumAnal = "{SIAM} J. Numer. Anal." }
+ @String{SIAMReview = "{SIAM} Review" }
+ @String{SIAMReview = "{SIAM} Rev." }
+ @String{SIAMSciStat = "{SIAM} Journal on Scientific and Statistical
+     Computing" }
+ @String{SIAMSciStat = "{SIAM} J. Sci. Statist. Comput." }
+
+ @String{SoftPracExp = "Software Practice and Experience" }
+ @String{SoftPracExp = "Software Prac. Experience" } % didn't find in AMS MR
+ @String{StatScience = "Statistical Science" }
+ @String{StatScience = "Statist. Sci." }
+ @String{Techno = "Technometrics" }
+ @String{USSRCompMathPhys = "{USSR} Computational Mathematics and Mathematical
+     Physics" }
+ @String{USSRCompMathPhys = "{U. S. S. R.} Comput. Math. and Math. Phys." }
+ @String{VLSICompSys = "Journal of {VLSI} and Computer Systems" }
+ @String{VLSICompSys = "J. {VLSI} Comput. Syst." }
+ @String{ZAngewMathMech = "Zeitschrift fur Angewandte Mathematik und
+     Mechanik" }
+ @String{ZAngewMathMech = "Z. Angew. Math. Mech." }
+ @String{ZAngewMathPhys = "Zeitschrift fur Angewandte Mathematik und Physik" }
+ @String{ZAngewMathPhys = "Z. Angew. Math. Phys." }
+
+% Publishers % ================================================= |
+
+ @String{Academic = "Academic Press" }
+ @String{ACMPress = "{ACM} Press" }
+ @String{AdamHilger = "Adam Hilger" }
+ @String{AddisonWesley = "Addison-Wesley" }
+ @String{AllynBacon = "Allyn and Bacon" }
+ @String{AMS = "American Mathematical Society" }
+ @String{Birkhauser = "Birkha{\"u}ser" }
+ @String{CambridgePress = "Cambridge University Press" }
+ @String{Chelsea = "Chelsea" }
+ @String{ClaredonPress = "Claredon Press" }
+ @String{DoverPub = "Dover Publications" }
+ @String{Eyolles = "Eyolles" }
+ @String{HoltRinehartWinston = "Holt, Rinehart and Winston" }
+ @String{Interscience = "Interscience" }
+ @String{JohnsHopkinsPress = "The Johns Hopkins University Press" }
+ @String{JohnWileySons = "John Wiley and Sons" }
+ @String{Macmillan = "Macmillan" }
+ @String{MathWorks = "The Math Works Inc." }
+ @String{McGrawHill = "McGraw-Hill" }
+ @String{NatBurStd = "National Bureau of Standards" }
+ @String{NorthHolland = "North-Holland" }
+ @String{OxfordPress = "Oxford University Press" }  %address Oxford or London?
+ @String{PergamonPress = "Pergamon Press" }
+ @String{PlenumPress = "Plenum Press" }
+ @String{PrenticeHall = "Prentice-Hall" }
+ @String{SIAMPub = "{SIAM} Publications" }
+ @String{Springer = "Springer-Verlag" }
+ @String{TexasPress = "University of Texas Press" }
+ @String{VanNostrand = "Van Nostrand" }
+ @String{WHFreeman = "W. H. Freeman and Co." }
+
+%Entries
+
+@article{DBLP:journals/semweb/FarberBMR18,
+  author    = {Michael F{\"{a}}rber and
+               Frederic Bartscherer and
+               Carsten Menne and
+               Achim Rettinger},
+  title     = {Linked data quality of {DBpedia}, {Freebase}, {OpenCyc}, {Wikidata}, and {YAGO}},
+  journal   = {Semantic Web},
+  volume    = {9},
+  number    = {1},
+  pages     = {77--129},
+  year      = {2018},
+  url       = {https://doi.org/10.3233/SW-170275},
+  doi       = {10.3233/SW-170275},
+  timestamp = {Wed, 14 Nov 2018 10:33:52 +0100},
+  biburl    = {https://dblp.org/rec/bib/journals/semweb/FarberBMR18},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/semweb/PujaraMGC13,
+  author    = {Jay Pujara and
+               Hui Miao and
+               Lise Getoor and
+               William W. Cohen},
+  title     = {Knowledge Graph Identification},
+  booktitle = {The Semantic Web - {ISWC} 2013 - 12th International Semantic Web Conference,
+               Sydney, NSW, Australia, October 21-25, 2013, Proceedings, Part {I}},
+  pages     = {542--557},
+  year      = {2013},
+  crossref  = {DBLP:conf/semweb/2013-1},
+  url       = {https://doi.org/10.1007/978-3-642-41335-3\_34},
+  doi       = {10.1007/978-3-642-41335-3\_34},
+  timestamp = {Tue, 14 May 2019 10:00:53 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/semweb/PujaraMGC13},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@proceedings{DBLP:conf/semweb/2013-1,
+  editor    = {Harith Alani and
+               Lalana Kagal and
+               Achille Fokoue and
+               Paul T. Groth and
+               Chris Biemann and
+               Josiane Xavier Parreira and
+               Lora Aroyo and
+               Natasha F. Noy and
+               Chris Welty and
+               Krzysztof Janowicz},
+  title     = {The Semantic Web - {ISWC} 2013 - 12th International Semantic Web Conference,
+               Sydney, NSW, Australia, October 21-25, 2013, Proceedings, Part {I}},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {8218},
+  publisher = {Springer},
+  year      = {2013},
+  url       = {https://doi.org/10.1007/978-3-642-41335-3},
+  doi       = {10.1007/978-3-642-41335-3},
+  isbn      = {978-3-642-41334-6},
+  timestamp = {Tue, 14 May 2019 10:00:53 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/semweb/2013-1},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@article{DBLP:journals/semweb/Paulheim17,
+  author    = {Heiko Paulheim},
+  title     = {Knowledge graph refinement: {A} survey of approaches and evaluation
+               methods},
+  journal   = {Semantic Web},
+  volume    = {8},
+  number    = {3},
+  pages     = {489--508},
+  year      = {2017},
+  url       = {https://doi.org/10.3233/SW-160218},
+  doi       = {10.3233/SW-160218},
+  timestamp = {Wed, 14 Nov 2018 10:33:52 +0100},
+  biburl    = {https://dblp.org/rec/bib/journals/semweb/Paulheim17},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@misc{kg_swj_issue,
+  year = {2018},
+  author = {Pascal Hitzler},
+  title = {{Special Issue on Knowledge Graphs: Construction, Management and Querying}},
+  howpublished = {\url{http://www.semantic-web-journal.net/blog/call-papers-special-issue-knowledge-graphs-construction-management-and-querying}},
+  note = {Accessed: 2019-06-25}
+}
+
+@misc{data_cube,
+  title={{The RDF data cube vocabulary}},
+  author={{World Wide Web Consortium and others}},
+  year={2014},
+  publisher={World Wide Web Consortium},
+  howpublished={\url{https://www.w3.org/TR/vocab-data-cube/\#schemes}},
+}
+
+@article{DBLP:journals/semweb/VandenbusscheAP17,
+  author    = {Pierre{-}Yves Vandenbussche and
+               Ghislain Atemezing and
+               Mar{\'{\i}}a Poveda{-}Villal{\'{o}}n and
+               Bernard Vatant},
+  title     = {Linked Open Vocabularies {(LOV):} {A} gateway to reusable semantic
+               vocabularies on the Web},
+  journal   = {Semantic Web},
+  volume    = {8},
+  number    = {3},
+  pages     = {437--452},
+  year      = {2017},
+  url       = {https://doi.org/10.3233/SW-160213},
+  doi       = {10.3233/SW-160213},
+  timestamp = {Wed, 14 Nov 2018 10:33:52 +0100},
+  biburl    = {https://dblp.org/rec/bib/journals/semweb/VandenbusscheAP17},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@inproceedings{DBLP:conf/icwe/MusyaffaHLOJAV18,
+  author    = {Fathoni A. Musyaffa and
+               Lavdim Halilaj and
+               Yakun Li and
+               Fabrizio Orlandi and
+               Hajira Jabeen and
+               S{\"{o}}ren Auer and
+               Maria{-}Esther Vidal},
+  title     = {OpenBudgets.eu: {A} Platform for Semantically Representing and Analyzing
+               Open Fiscal Data},
+  booktitle = {Web Engineering - 18th International Conference, {ICWE} 2018, C{\'{a}}ceres,
+               Spain, June 5-8, 2018, Proceedings},
+  pages     = {433--447},
+  year      = {2018},
+  crossref  = {DBLP:conf/icwe/2018},
+  url       = {https://doi.org/10.1007/978-3-319-91662-0\_35},
+  doi       = {10.1007/978-3-319-91662-0\_35},
+  timestamp = {Tue, 14 May 2019 10:00:53 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/icwe/MusyaffaHLOJAV18},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@proceedings{DBLP:conf/icwe/2018,
+  editor    = {Tommi Mikkonen and
+               Ralf Klamma and
+               Juan Hern{\'{a}}ndez},
+  title     = {Web Engineering - 18th International Conference, {ICWE} 2018, C{\'{a}}ceres,
+               Spain, June 5-8, 2018, Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {10845},
+  publisher = {Springer},
+  year      = {2018},
+  url       = {https://doi.org/10.1007/978-3-319-91662-0},
+  doi       = {10.1007/978-3-319-91662-0},
+  isbn      = {978-3-319-91661-3},
+  timestamp = {Tue, 14 May 2019 10:00:53 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/icwe/2018},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/smap/FilippidisKKIB16,
+  author    = {Panagiotis{-}Marios Filippidis and
+               Sotirios Karampatakis and
+               Kleanthis Koupidis and
+               Lazaros Ioannidis and
+               Charalampos Bratsas},
+  title     = {The code lists case: Identifying and linking the key parts of fiscal
+               datasets},
+  booktitle = {11th International Workshop on Semantic and Social Media Adaptation
+               and Personalization, {SMAP} 2016, Thessaloniki, Greece, October 20-21,
+               2016},
+  pages     = {165--170},
+  year      = {2016},
+  crossref  = {DBLP:conf/smap/2016},
+  url       = {https://doi.org/10.1109/SMAP.2016.7753404},
+  doi       = {10.1109/SMAP.2016.7753404},
+  timestamp = {Tue, 23 May 2017 01:08:04 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/smap/FilippidisKKIB16},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@proceedings{DBLP:conf/smap/2016,
+  editor    = {Ioannis Anagnostopoulos and
+               Iraklis Paraskakis},
+  title     = {11th International Workshop on Semantic and Social Media Adaptation
+               and Personalization, {SMAP} 2016, Thessaloniki, Greece, October 20-21,
+               2016},
+  publisher = {{IEEE}},
+  year      = {2016},
+  url       = {http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=7742873},
+  isbn      = {978-1-5090-5245-5},
+  timestamp = {Tue, 29 Nov 2016 14:02:55 +0100},
+  biburl    = {https://dblp.org/rec/bib/conf/smap/2016},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@article{DBLP:journals/peerj-cs/WilkinsonVSCSKG17,
+  author    = {Mark D. Wilkinson and
+               Ruben Verborgh and
+               Luiz Olavo Bonino da Silva Santos and
+               Tim Clark and
+               Morris A. Swertz and
+               Fleur D. L. Kelpin and
+               Alasdair J. G. Gray and
+               Erik A. Schultes and
+               Erik M. van Mulligen and
+               Paolo Ciccarese and
+               Arnold Kuzniar and
+               Anand Gavai and
+               Mark Thompson and
+               Rajaram Kaliyaperumal and
+               Jerven T. Bolleman and
+               Michel Dumontier},
+  title     = {Interoperability and FAIRness through a novel combination of Web technologies},
+  journal   = {PeerJ Computer Science},
+  volume    = {3},
+  pages     = {e110},
+  year      = {2017},
+  url       = {https://doi.org/10.7717/peerj-cs.110},
+  doi       = {10.7717/peerj-cs.110},
+  timestamp = {Fri, 30 Nov 2018 13:22:16 +0100},
+  biburl    = {https://dblp.org/rec/bib/journals/peerj-cs/WilkinsonVSCSKG17},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@inproceedings{military_ontology,
+  author    = {Robert H. Warren},
+  title     = {Creating specialized ontologies using {Wikipedia}: The {Muninn} experience},
+  booktitle = {Proceedings of Wikipedia Academy: Research and Free Knowledge. (WPAC2012), Berlin, Germany, June 2012. Wikimedia Deutschland},
+  year      = {2012}
+}
+@article{DBLP:journals/semweb/LohmannNHE15,
+  author    = {Steffen Lohmann and
+               Stefan Negru and
+               Florian Haag and
+               Thomas Ertl},
+  title     = {Visualizing ontologies with {VOWL}},
+  journal   = {Semantic Web},
+  volume    = {7},
+  number    = {4},
+  pages     = {399--419},
+  year      = {2016},
+  url       = {https://doi.org/10.3233/SW-150200},
+  doi       = {10.3233/SW-150200},
+  timestamp = {Sat, 20 May 2017 00:22:18 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/semweb/LohmannNHE15},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@article{DBLP:journals/corr/abs-1801-04479,
+  author    = {Marcia Lei Zeng and
+               Philipp Mayr},
+  title     = {Knowledge Organization Systems {(KOS)} in the Semantic Web: {A} Multi-Dimensional
+               Review},
+  journal   = {CoRR},
+  volume    = {abs/1801.04479},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1801.04479},
+  archivePrefix = {arXiv},
+  eprint    = {1801.04479},
+  timestamp = {Mon, 13 Aug 2018 16:48:45 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1801-04479},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@article{DBLP:journals/semweb/VandenbusscheUM17,
+  author    = {Pierre{-}Yves Vandenbussche and
+               J{\"{u}}rgen Umbrich and
+               Luca Matteis and
+               Aidan Hogan and
+               Carlos Buil Aranda},
+  title     = {{SPARQLES:} Monitoring public {SPARQL} endpoints},
+  journal   = {Semantic Web},
+  volume    = {8},
+  number    = {6},
+  pages     = {1049--1065},
+  year      = {2017},
+  url       = {https://doi.org/10.3233/SW-170254},
+  doi       = {10.3233/SW-170254},
+  timestamp = {Thu, 17 Aug 2017 16:21:55 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/semweb/VandenbusscheUM17},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@inproceedings{Yati_eswc12,
+  author    = {Nor Azlinayati Abdul Manaf and
+               Sean Bechhofer and
+               Robert Stevens},
+  editor    = {Elena Simperl and
+               Philipp Cimiano and
+               Axel Polleres and
+               {\'{O}}scar Corcho and
+               Valentina Presutti},
+  title     = {The Current State of {SKOS} Vocabularies on the Web},
+  booktitle = {The Semantic Web: Research and Applications - 9th Extended Semantic
+               Web Conference, {ESWC} 2012, Heraklion, Crete, Greece, May 27-31,
+               2012. Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {7295},
+  pages     = {270--284},
+  publisher = {Springer},
+  year      = {2012},
+  url       = {https://doi.org/10.1007/978-3-642-30284-8\_25},
+  doi       = {10.1007/978-3-642-30284-8\_25},
+  timestamp = {Tue, 14 May 2019 10:00:44 +0200},
+  biburl    = {https://dblp.org/rec/conf/esws/ManafBS12.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+@phdthesis{Yati-thesis,
+  author       = {Nor Azlinayati Abdul Manaf}, 
+  title        = {{Transforming Ontologies in the Web Ontology Language (OWL) to Vocabularies in the Simple Knowledge Organization System (SKOS)}},
+  school       = {The University of Manchester},
+  year         = {2015},
+  month        = {3}
+}
+
+@inproceedings{conf/er/AlmeidaFC17,
+  author = {Almeida, João Paulo A. and Fonseca, Claudenir M. and de Carvalho, Victorio Albani},
+  biburl = {https://www.bibsonomy.org/bibtex/22ceab1439a4b0f4ec42048ed684b25ea/dblp},
+  booktitle = {ER},
+  editor = {Mayr, Heinrich C. and Guizzardi, Giancarlo and Ma, Hui and Pastor, Oscar},
+  ee = {https://doi.org/10.1007/978-3-319-69904-2_23},
+  isbn = {978-3-319-69904-2},
+  pages = {280-294},
+  publisher = {Springer},
+  series = {Lecture Notes in Computer Science},
+  title = {A Comprehensive Formal Theory for Multi-level Conceptual Modeling.},
+  url = {http://dblp.uni-trier.de/db/conf/er/er2017.html#AlmeidaFC17},
+  volume = {10650},
+  year = {2017}
+}
+
+@article{journals/dagstuhl-reports/AlmeidaFK17,
+  author = {Almeida, João Paulo A. and Frank, Ulrich and Kühne, Thomas},
+  ee = {https://doi.org/10.4230/DagRep.7.12.18},
+  journal = {Dagstuhl Reports},
+  number = {12},
+  pages = {18-49},
+  title = {Multi-Level Modelling ({Dagstuhl} Seminar 17492).},
+  url = {http://dblp.uni-trier.de/db/journals/dagstuhl-reports/dagstuhl-reports7.html#AlmeidaFK17},
+  volume = {7},
+  year = {2017}
+}
+
+@article{mcguinness2004owl,
+  title={{OWL web ontology language overview. W3C recommendation}},
+  author={McGuinness, Deborah L},
+  journal={http://www. w3. org/TR/owl-features},
+  year={2004}
+}
+
+@article{miles2009skos,
+  title={{SKOS simple knowledge organization system reference}},
+  author={Miles, Alistair and Bechhofer, Sean},
+  journal={W3C recommendation},
+  year={2009},
+  publisher={World Wide Web Consortium}
+}
+
+@article{knublauch2017shapes,
+  title={{Shapes constraint language (SHACL)}},
+  author={Knublauch, Holger and Kontokostas, Dimitris},
+  journal={W3C Candidate Recommendation},
+  volume={11},
+  number={8},
+  year={2017}
+}
+
+@book{CPV,
+  editor={Natasha Noy},
+  title={{Representing Classes As Property Values on the Semantic Web}},
+  publisher={{W3C}},
+  series={Working Group Note},
+  year={2005},
+  month={4},
+  url={http://www.w3.org/TR/swbp-classes-as-values/}
+}
+
+@book{alanrector,
+  editor={Alan Rector},
+  title={{Representing Specified Values in OWL: "value partitions" and "value sets"}},
+  publisher={{W3C}},
+  series={Working Group Note},
+  year={2005},
+  month={5},
+  url={http://www.w3.org/TR/2005/NOTE-swbp-specified-values-20050517}
+}
+
+@inproceedings{KCap13,
+  added-at = {2013-10-01T00:00:00.000+0200},
+  author = {Svátek, Vojtěch and Homola, Martin and Kľuka, Ján and Vacura, Miroslav},
+  booktitle = {K-CAP},
+  editor = {Benjamins, V. Richard and d'Aquin, Mathieu and Gordon, Andrew},
+  ee = {http://doi.acm.org/10.1145/2479832.2479847},
+  interhash = {5ce297492dbf1d5b53c19962d5e0e593},
+  intrahash = {2bc14b44828538547d15ed421704cffd},
+  isbn = {978-1-4503-2102-0},
+  keywords = {dblp},
+  pages = {117-120},
+  publisher = {ACM},
+  timestamp = {2013-10-02T11:33:21.000+0200},
+  title = {Mapping structural design patterns in {OWL} to ontological background models.},
+  year = {2013}
+}
+
+@inproceedings{GR,
+  author    = {Martin Hepp},
+  title     = {Good{R}elations: {A}n Ontology for Describing Products and Services Offers
+               on the Web},
+  booktitle = {Knowledge Engineering: Practice and Patterns, 16th International Conference,
+               {EKAW} 2008, Acitrezza, Italy, September 29--October 2, 2008. Proceedings},
+  pages     = {329--346},
+  year      = {2008},
+}
+
+
+@misc{guide_code_list,
+  title={{Guidelines for the Use of Code Lists}},
+  author={Dekkers, M. and Brule, D. and Droscariu A. and Novacean, I.},
+  year={2018},
+  publisher={European Commission},
+  howpublished={\url{https://joinup.ec.europa.eu/sites/default/files/document/2018-05/Guidelines\%20for\%20the\%20Use\%20of\%20Code\%20Lists\%20v1.00.pdf}},
+}
+
+
+@inproceedings{obeu_dcv,
+  author = {Mynarz, Jindrich and Svátek, Vojtech and Karampatakis, Sotirios and Klímek, Jakub and Bratsas, Charalampos},
+booktitle = {SEMANTiCS (Posters, Demos, SuCCESS)},
+  editor = {Martin, Michael and Cuquet, Martí and Folmer, Erwin},
+  ee = {http://ceur-ws.org/Vol-1695/paper25.pdf},
+  publisher = {CEUR-WS.org},
+  series = {CEUR Workshop Proceedings},
+  title = {Modeling fiscal data with the Data Cube Vocabulary.},
+  url = {http://dblp.uni-trier.de/db/conf/i-semantics/semantics2016p.html#MynarzSKKB16},
+  volume = 1695,
+  year = 2016
+}
+
+@inproceedings{DBLP:conf/ekaw/RectorDHRKSWW04,
+  author    = {Alan L. Rector and
+               Nick Drummond and
+               Matthew Horridge and
+               Jeremy Rogers and
+               Holger Knublauch and
+               Robert Stevens and
+               Hai Wang and
+               Chris Wroe},
+  editor    = {Enrico Motta and
+               Nigel Shadbolt and
+               Arthur Stutt and
+               Nicholas Gibbins},
+  title     = {{OWL} Pizzas: Practical Experience of Teaching {OWL-DL:} Common Errors
+               {\&} Common Patterns},
+  booktitle = {Engineering Knowledge in the Age of the Semantic Web, 14th International
+               Conference, {EKAW} 2004, Whittlebury Hall, UK, October 5-8, 2004,
+               Proceedings},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {3257},
+  pages     = {63--81},
+  publisher = {Springer},
+  year      = {2004},
+  url       = {https://doi.org/10.1007/978-3-540-30202-5\_5},
+  doi       = {10.1007/978-3-540-30202-5\_5},
+  timestamp = {Mon, 09 Mar 2020 08:49:54 +0100},
+  biburl    = {https://dblp.org/rec/conf/ekaw/RectorDHRKSWW04.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+

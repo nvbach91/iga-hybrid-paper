@@ -1,0 +1,105 @@
+\section*{Reviews}
+
+
+----------------------- REVIEW 1 ---------------------
+
+SUBMISSION: 114
+
+TITLE: Pattern-Based Detection and Analysis of Code Lists in RDF Knowledge Bases
+
+AUTHORS: Viet Bach Nguyen and Vojtěch Svátek
+
+----------- Overall evaluation -----------
+
+SCORE: -2 (reject)
+
+----- TEXT:
+
+The contribution of the paper  is a collection of SPARQL queries that enables the extraction of embedded code lists from ontologies, currently from the Linked Open Vocabularies, and a web application to inspect the results.
+
+Pros:
+
+- no prior research that would focus on the usage of code lists across domains
+
+- The source code of the project is available on GitHub under an open-source license
+
+Cons:
+
+- the terms used - e.g., ontology, ontology schema, knowledge graph and above all code lists, which are the central concept - are not rigorously defined. They are defined rather intuitively, in a loosy way. This makes the exact contribution of the paper unclear.
+
+
+**Sect.1 **
+
+Code lists are not defined.
+
+Figure 1 - the texts on the Figure are not readable (too small)
+
+SKOS not defined/introduced 
+
+**Sect.2 **
+
+OWL, SHACL - no references given
+
+"In terms of sharability and interoperability, code lists are the most suitable structure and can be widely used across systems." No reference to back up this claim.
+
+"An ontology schema consists of associated terms and definitions of their relationships. Together they form a structure that resembles a complex network of interconnected (edges) concepts (nodes) that usually are organized into multiple levels of hierarchies, sometimes objectionably cyclical, with rigorous semantics"
+
+The above description misses the point that (OWL) ontologies consist of axioms.
+
+What are "syntactical instances"?
+
+What is a "closed structure"?
+
+**Sect.3 **
+
+How do we know where to look for code lists in LOV? What are the criteria? Are there any parameters, thresholds?
+
+Overall, the paper lacks clear definitions of the terms with which it deals and technical rigour.
+
+
+
+----------------------- REVIEW 2 ---------------------
+
+SUBMISSION: 114
+
+TITLE: Pattern-based Detection and Analysis of Code Lists in RDF Knowledge Bases
+
+AUTHORS: Viet Bach Nguyen and Vojtěch Svátek
+
+----------- Overall evaluation -----------
+
+SCORE: 1 (weak accept)
+
+----- TEXT:
+
+This short paper submission presents an appproach to extract code lists embedded in ontologies and analysis of their usage in knowledge graphs. Indeed, ontology modeling in the real world sometimes results in an ontology that contains code lists, especially if in the concerned domain, community-maintained controlled vocabulary already existed prior to the modeling of the ontology. Unlike formal ontologies, code lists can be viewed as a simple glossary where the semantics of its terms are usually intended for human consumption. Sometimes the terms are organized in a hierarchy, forming a taxonomy. In terms of linked data principles, code lists are just one level better than using string literals for the modeled concepts.
+
+The extraction method proposed by the authors is realized through a collection of SPARQL queries. All 5 presented queries together can indeed in principle retrieve code list instances from an ontology. It would be more complete if the authors provide an explanation as to whether those 5 queries are sufficient to retrieve all code lists. 
+
+Another remaining question is what's after extracting code lists. Is the intention later to provide richer modeling for such code lists? It also can be clarified further for the analysis of the code lists that what happen if the knowledge base evolves.
+
+
+
+----------------------- REVIEW 3 ---------------------
+
+SUBMISSION: 114
+
+TITLE: Pattern-based Detection and Analysis of Code Lists in RDF Knowledge Bases
+
+AUTHORS: Viet Bach Nguyen and Vojtěch Svátek
+
+----------- Overall evaluation -----------
+
+SCORE: -1 (weak reject)
+
+----- TEXT:
+
+This paper presents an approach for detecting and analysing code lists in RDF graphs.  The approach is implemented as a sequence of SPARQL queries and available on GitHub.  These have been applied to the vocabularies available at LOV.  Some conclusions about the usage of code lists are drawn based on the application of this implementation to LOV.
+
+The importance of code lists is well motivated and justifies such an investigation.  However, I think that too much of the material of this paper is devoted to irrelevant aspects.
+
+However, for such a short paper the broad discussion of ontology schemas and knowledge graphs seems irrelevant to me.  They are presented as knowledge representation approaches that are different from, or complementary to, code lists, but the argumentation is not exactly to the point.  Yes, these different representations exist and have their pros and cons, but the focus of your current work is clearly on code lists, so why even discuss the importance of ontology schemas and knowledge graphs?  Then, the point that "code lists are the most suitable structure" is not really justified.  For what are they most suitable, and why?  Similarly, you argue that ontologies are "more structured": more structured than what?
+
+The VOWL visualisations are nice to look at, but what is their relevance?  Did they help you to obtain relevant insights?  If so, it would be good to summarize them.
+
+The owl:subClassOf property does not exist.  According to https://www.w3.org/TR/owl2-mapping-to-rdf/, there is only rdfs:subClassOf when OWL is serialised as RDF.

@@ -1,0 +1,111 @@
+\section{Candidate code list patterns in RDF / OWL}
+\label{s:codelist-def}
+
+The notion of code list does not formally belong to the central ones in the semantic web: it does not appear, at least not under such a calling, anywhere in the core W3C recommendations (e.g., for RDF, OWL or SPARQL). 
+Therefore, we decided to depart from the definition formulated in a highly authoritative document created in a specific corner of the semantic web field: the EU-endorsed \emph{Guidelines for the Use of Code Lists} \cite{guide_code_list} designed for  \emph{metadata management in public administration}; while RDF is considered as a possible technology for code list representation, it does not have an exclusive nor dominant position there. 
+The purpose of this section is then to project the retrieved definition to the representation space of OWL ontologies (and, comparatively, instance-level RDF knowledge graphs) as our target in this paper.
+
+Having said that, we however acknowledged a W3C note addressing a topic very similar to our notion of code list while not using this term: A.~Rector's treatment of `Representing Specified Values', from 2005 \cite{alanrector}. 
+We will align our analysis with it, though arriving at slightly different engineering choices due to both the development of the semantic web landscape in the meantime and to the difference in focus: primarily inference-heavy ontologies in Rector's case, and mostly lightweight linked data vocabularies in our case, the latter assuming straightforward assignment of values to properties unconstrained by many ontological commitments in the Tbox.
+
+The guidelines document \cite{guide_code_list}, developed under the EU SEMICS Action (addressing semantic interoperability), defines code lists as ``lists of \emph{values} in a \emph{predefined set} that can be used in metadata and that help metadata creators in \emph{selecting} from a set of descriptors, thereby enhancing consistency and helping to avoid errors'' (p.~3, italics purposefully added for notions that are pivotal for our purpose). 
+
+\subsection{Syntactic status of codes for embedded code lists}
+\label{ss:def_type}
+Let us first interpret the notion of `value' from the above definition.
+In the context of ontologies and other RDF graphs, we normally speak about \emph{values} in reference to \emph{properties} to which these values are assigned.
+For ontologies (and knowledge graphs) to remain within the tractable OWL DL expressiveness fragment, such values can be either:
+\begin{enumerate}
+    \item Syntactic \emph{individuals}. 
+    Individuals can be assigned to (object) properties entirely freely, under the open world assumption.
+    The use of individuals is proposed in A.~Rector's Pattern 1, called \emph{value sets} \cite{alanrector}.
+    Aside mere sets of individuals (usable as values of a property) Rector also includes three further elements of the pattern: first, a \emph{class} to which the instances belong as its \emph{enumeration} (through an \emph{owl:oneOf} axiom); second, the declaration of the individuals being pairwise different (through an \emph{owl:allDifferent} axiom); and third, \emph{value restrictions} (in description logic terms, existential restriction to a singleton nominal) on the property, which define each one derived class respective to the particular value.
+    He demonstrates the pattern on the health status value \texttt{Good\_health\_value}, which is used to define a class \texttt{Healthy\_Person} via the property \texttt{has\_health\_status}. \\
+    As downsides of the pattern, Rector mentions the impossibility to further sub-partition the values and the limited support of individuals by reasoners. The former limitation can however be overcome by employing a hierarchical partitioning suited for individuals (foremost, through \emph{skos:broader} and \emph{skos:narrower}), while the latter does not apply to nowaday's reasoners any longer.
+
+    \item \emph{Classes}.
+    Obviously, assigning classes via properties is a bit more complicated. 
+    One possibility is to employ the \emph{punning}\footnote{\url{https://www.w3.org/TR/owl2-new-features/\#F12:\_Punning}} technique, i.e., interpreting the resource as an  individual merely having the same IRI as the corresponding class. 
+    Since punning had not been allowed in OWL when A.~Rector wrote his note \cite{alanrector}, he designed a class-based pattern (Pattern 2), called \emph{value partition}, as relying on a (normal) existential restriction. In the example for this pattern, the health status value \texttt{Good\_health\_value} is therefore a class, and as such, it is not assigned to a person (\textt{John}) directly but through its instance \texttt{Johns\_Health} (or, alternatively, via an anonymous instance).\footnote{The instance is not materialized in this variant, but the assignment itself is done using an existential restriction: $\texttt{John} \in \exists \; \; \texttt{has\_health\_status} \; . \; \texttt{Good\_health\_value}$. We would not find such a method of assigning values much relevant when talking about code lists; in any case, it does not make any difference at the level of the ontology itself.}
+    Other additional axioms are analogous to Pattern 1 but tailored to classes: there is a common \emph{superclass} of all values, and it is defined as their \emph{disjoint union}.
+    
+    \item \emph{Literals} (data values).
+    Literals can also be easily assigned to (datatype) properties.
+    A custom datatype could be defined to hold an enumerated list of values (as Rector mentioned in the preamble of his note), however, this is not a common practice in ontologies.
+\end{enumerate}
+
+Of the three possibilities of building the `predefined sets' \cite{guide_code_list}, we will immediately rule out the \emph{literals}.
+Foremost, we do not normally find them in ontologies in the form of custom data types.
+Second, more generally, the role of literals on the semantic web is primarily in the interaction with human users. 
+While textual values may play the role of codelists in some RDF datasets, the fact that they are not globally unique identifiers (as IRIs) significantly compromises their machine-based interoperability.
+
+Sets of \emph{classes}, if embedded in the form of Rector's value partition pattern, can surely be interpreted as code lists.
+Merely as an engineering choice, we decided not to include them in our study, because
+\begin{itemize}
+    \item the pattern is not frequently used in linked data vocabularies (it is possibly more common, e.g., for some Bioportal\footnote{\url{https://bioportal.bioontology.org/}} ontologies, which tend to be more richly axiomatized)
+    \item our ultimate goal is to expose the code lists as stand-alone SKOS structures; this would however require a `meta-modeling' transformation of `codes' from classes to individuals (instances of \emph{skos:Concept}), which is possible but would add a level of complexity to the process.
+\end{itemize}
+
+Therefore, for our purposes, we will only consider embedded code lists as sets of \emph{syntactic individuals} present in ontologies.
+As regards the additional axioms of Rector's Pattern 1, we do not consider any of them (\emph{owl:oneOf}, \emph{owl:allDifferent} nor the value restriction) as necessary, as such strong ontological commitment is nowadays rather discouraged for linked data vocabularies. 
+The fact that the values are distinct and exhaustively enumerated might be actually implicit but obvious to the user of the ontology, and the values are meant to be just assigned to dataset instances rather than used for defining a class.
+
+\subsection{Graph patterns for capturing code lists}
+\label{ss:def_patt}
+
+In the RDF representation, a set of individuals can be glued together by several pattern techniques, most notably:
+\begin{itemize}
+    \item (\textbf{T1}) by being instances of a common class, i.e., appearing as subject in triples with predicate \emph{rdf:type} and the object being this class
+    \item (\textbf{T2})  by appearing as objects in triples with the same predicate, and possibly also subject
+    \item (\textbf{T3}) by appearing as subjects in triples with the same predicate (other than \emph{rdf:type}), and possibly also object.
+\end{itemize}
+Although the previous subsection only talked about code lists embedded in ontologies, it should be mentioned that \emph{sets} of `sibling' individuals might be identified both in ontologies (concept-level knowledge bases) and in  knowledge graphs (instance-level knowledge bases), in principle.
+The problem of \emph{instance-level} graphs is however their usually large size and open nature, which discourages from viewing such `sibling sets' as intentionally \emph{pre-defined} code lists.
+Also the target mentioned in the definition from the guidelines \cite{guide_code_list}, `enhancing consistency' (between independently created resources that reuse the given code list), have better chance to be achieved via \emph{ontologies}, since they are more likely to be widely reused than most instance-level knowledge graphs (even if especially encyclopaedic KGs, such as Wikidata or DBpedia, do enjoy extensive reuse by reference).
+
+Looking at \emph{ontologies}, we see that individuals only appear in some of them.
+Their small number, never mind the mere nature of ontologies as compact artifacts, indicates that the introduction to individuals to ontologies may satisfy the assumption of intentionally \emph{predefined} sets of values from the Guidelines \cite{guide_code_list}. 
+Considering the concept-level nature of ontologies, we can conjecture a limited number of motivations why individuals would enter this company:\footnote{Note that A. Rector's Pattern 1 \cite{alanrector} encompasses three of the motivations, \textbf{M1}, \textbf{M2} and \textbf{M3}. However, in real cases the motivations could possibly arise even independently of each other.}
+\begin{itemize}
+    \item (\textbf{M1}) In order to specify the \emph{allowed values} that can be \emph{assigned to a property}.
+    \item (\textbf{M2}) In order to \emph{define a class} as an \emph{enumeration} of individuals (one-of restriction). 
+    \item (\textbf{M3})  In order to \emph{define a class} through a \emph{property-value pair} (value restriction, i.e. existential restriction with a singleton class in its filler)  
+    \item (\textbf{M4}) In order to explain the meaning of a class through its \emph{example instances}.
+\end{itemize}
+Intuitively, \textbf{M1}  is coherent with the notion of code list, see the formulation ``\emph{selecting from a set} of descriptors'' in the definition from the guidelines \cite{guide_code_list}, since the property with the value together form a descriptor to be selected.
+Also  \textbf{M2} to some degree fits the notion of code list: the set of values is \emph{closed}.
+However, the `selection' (of a value to a property) is not explicit.
+\textbf{M3}  is less relevant, since it only assumes a single, possibly isolated, individual, that allows to define a single class.
+Finally, \textbf{M4}  is clearly beyond the notion of code list, since example instances are by no means `pre-defined'.
+
+We can now compare these motivations with the three graph pattern techniques of grouping individuals above. 
+
+We immediately see that \textbf{T1} -- instantiation of a common class -- plays an important role in most of the motivations.
+For \textbf{M1}, the link between a property and a set of individuals is most straightforwardly expressed by introducing a class over-arching these individuals and making this class the range of the property (or possibly the filler of local universal restrictions).
+\textbf{M2} and \textbf{M4} introduce such a class inherently.
+Thus only \textbf{M3} does not necessitate the introduction of a class (and a \emph{set} of individuals instantiating it) -- but it is possible that in order to define a \emph{set of classes} of a similar kind, instances (value restriction fillers) belonging to a common class would come into play.\footnote{As an example, though a merely educative one, consider the well-known \emph{Pizzas} ontology, \url{https://protege.stanford.edu/ontologies/pizza/pizza.owl} used to illustrate the common caveats of OWL ontology modeling \cite{DBLP:conf/ekaw/RectorDHRKSWW04}. There classes of pizzas such as \texttt{RealItalianPizza} or \texttt{American} are defined through a value restriction on property \texttt{hasCountryOfOrigin}, with fillers such as \texttt{Italy} or \texttt{America}, all being instances of class \texttt{Country}.}
+
+Technique \textbf{T2} -- individuals as values of the same property -- is only expressed indirectly in the ontology itself in the case of motivation \textbf{M1}, namely, via a range axiom, or local restriction/s, whose filler is the class of those individuals,\footnote{The filler also could be the enumeration of values instead of a named class, such a practice would however be very usual in the context of using a range axiom in linked data vocabularies.} see the previous paragraph. 
+(Obviously, the relation between the individuals and properti/es is foreseen in the datasets referring to the given ontology.)
+Similarly, for \textbf{M3} the property appears in the value restriction.
+The remaining motivations, \textbf{M2} and \textbf{M4}, do not consider an `assignment' property associated with them.
+As regards the grouping of individuals in the object of triples sharing  \emph{both the predicate and subject}, it is completely irrelevant for our case, since in \textbf{M1} the subject of the triples is not considered at all,\footnote{When specifically considering code lists, by our experience it is rather uncommon for different conceptual types of subject entities to be described by the same code list property.} and in \textbf{M3} each code defines a different class (each presumably instantiating a disjoint set of individuals in datasets).
+
+Finally, technique \textbf{T3} -- individuals as subjects used with the same property, and possibly the same object -- is not inherently part of any of the motivations.
+Note that to satisfy the assumption of the code list being `pre-defined', we need a property whose semantics would suggest that the identity of its object determines a stable collection of resources that can appear as its subject.
+In this respect, we deem the property \emph{skos:inScheme} as highly relevant.
+The situation of a set of individuals being concepts (instances of \emph{skos:Concept}) belonging to the same SKOS scheme (i.e., linked through \emph{skos:inScheme} to a particular instance of \emph{skos:ConceptScheme}) is analogous to the situation of a set of individuals being instances of a particular domain-specific class in the ontology.
+
+\subsection{Summary}
+Based on the considerations from this section, we may characterize the candidate structures for code lists in OWL ontologies as follows: 
+\begin{itemize}
+    \item They are NECESSARILY sets of syntactic \emph{individuals}, i.e. neither literals nor classes (cf. Section~\ref{ss:def_type}).\footnote{We would like to recall that we consider this merely as an engineering decision, eliminating literals due to their problematic machine-processability and classes due to the subsequent reliance on OWL restrictions and need of far-reaching representational transformations. Follow-up research will possibly consider these, especially the classes (`value partitions' in A. Rector's style).} 
+    \item The individuals are PREFERABLY \emph{instances of a common class} from the ontology (cf. technique \textbf{T1} in Section~\ref{ss:def_patt}).
+    This class is OPTIONALLY in the range of at least one \emph{property}.
+    \item The individuals are PREFERABLY instances of \emph{skos:Concept}, and linked by the \emph{skos:inScheme} property to the same \emph{skos:ConceptScheme} instance (cf. technique \textbf{T3} in Section~\ref{ss:def_patt}).
+%    \item The individuals are OPTIONALLY declared as different individuals (through \emph{owl:differentFrom} or \emph{owl:allDifferent}).
+%    \item The individuals are OPTIONALLY instances of a class \emph{enumerating them} (through \emph{owl:oneOf}).
+\end{itemize}
+This (`fuzzy') pattern will be reflected in the subsequent formulation of SPARQL queries aiming to retrieve the relevant structures from real vocabularies (Section~\ref{s:codelistanalyzer}).
+Note that the technique \textbf{T2} is only included as optional, as it is redundant for code list extraction with respect to \textbf{T1} (i.e., ``if there is an assignment property in the ontology, there is also a filler class''). 
+%However, we will take the assignment property into consideration in the bottom-up analysis covering all individuals (Section~\ref{s:analysis_code_list_modeling_practice}).

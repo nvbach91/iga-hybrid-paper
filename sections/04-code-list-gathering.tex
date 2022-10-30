@@ -1,0 +1,77 @@
+\section{Collecting code lists and applying SKOS}
+%We used our proposed workflow to query and analyze additional open datasets with an available SPARQL endpoint found in SPARQLES \cite{DBLP:journals/semweb/VandenbusscheUM17}. The experiment involved a total of 166 SPARQL endpoints that were marked as available in SPARQLES. The full list of used queried endpoints is available in our GitHub repository.
+\label{s:skos_codelist_collecting}
+We have used the proposed queries to detect all candidate code lists in the LOV catalog. The next step is to query the details of those code lists and create a new dataset solely consisting of code lists and their codes.
+
+We retrieved all code list structures from each vocabulary in LOV (if available) in the form of RDF triples using a SPARQL CONSTRUCT query for each detected code list IRI (Code listing \ref{lst:sparql6}). Metadata and detailed information of each code are then retrieved separately using another SPARQL query.
+
+\medskip
+\medskip
+\medskip
+
+\begin{lstlisting}[captionpos=b, caption=Query to gather all code lists and annotate them with SKOS,label=lst:sparql6,basicstyle=\ttfamily,frame=single]
+CONSTRUCT {
+  ?codelist a skos:ConceptScheme .
+  ?c1 a skos:Concept .
+  ?c1 skos:inScheme ?codelist .
+  ?c1 ?p ?c2 .
+}
+FROM <${vocab}> WHERE {
+  BIND(<${codelist}> AS ?codelist)
+  ?c1 a ?codelist .
+  OPTIONAL { ?c2 a ?codelist . ?c1 ?p ?c2 . }
+}
+\end{lstlisting}
+
+The retrieved code lists and codes are annotated with \textit{skos:Concept}, \textit{skos:ConceptScheme} and \textit{skos:inScheme} to facilitate SKOS-based querying. The RDF data are then uploaded to a triple store and this new dataset contains 13,795 triples, 306 code lists and 2864 codes. In order to get a list of code lists, the following SPARQL query can be used:
+
+\begin{lstlisting}[captionpos=b, caption=Query to get a list of code lists,label=lst:sparql7,basicstyle=\ttfamily,frame=single]
+SELECT * WHERE  {
+  ?codelist a skos:ConceptScheme .
+}
+\end{lstlisting}
+
+To get all codes and their respective code lists, we then use the following SPARQL query:
+
+\begin{lstlisting}[captionpos=b, caption=Query to get all code lists with codes,label=lst:sparql8,basicstyle=\ttfamily,frame=single]
+SELECT * WHERE  {
+  ?codelist a skos:ConceptScheme .
+  ?code a skos:Concept .
+  ?code skos:inScheme ?codelist .
+}
+\end{lstlisting}
+
+We have also mentioned that there might be a relationship between individual codes of the same code list that create a small sub-graph in the whole graph. We can use the following query to get that information.
+
+
+\begin{lstlisting}[captionpos=b, caption=Query to capture the structures of code lists,label=lst:sparql9,basicstyle=\ttfamily,frame=single]
+SELECT * WHERE  {
+  ?codelist a skos:ConceptScheme .
+  ?code1 a skos:Concept .
+  ?code1 skos:inScheme ?codelist .
+  OPTIONAL {
+   ?code2 a skos:Concept .
+   ?code2 skos:inScheme ?codelist .
+   ?code1 ?p ?code2 .
+  }
+}
+\end{lstlisting}
+
+Similarly, we can query for relationships between codes that are parts of different code lists using the following query:
+
+\begin{lstlisting}[captionpos=b, caption=Query to capture the relationships between code list members,label=lst:sparql10,basicstyle=\ttfamily,frame=single]
+SELECT * WHERE  {
+  ?codelist1 a skos:ConceptScheme .
+  ?code1 a skos:Concept .
+  ?code1 skos:inScheme ?codelist1 .
+  OPTIONAL {
+   ?codelist2 a skos:ConceptScheme .
+   ?code2 a skos:Concept .
+   ?code2 skos:inScheme ?codelist2 .
+   ?code1 ?p ?code2 .
+  }
+  FILTER(?codelist1 != ?codelist2)
+}
+\end{lstlisting}
+
+The previous query returns 93 result rows. Examination of these results reveals that relationships exist between the code lists at the code levels. The SPARQL queries in this section is not implemented in Code List Analyzer, but run separately based on manual analysis. %Some of these relationships are however instantiations of an external reused class.

@@ -1,0 +1,50 @@
+
+\section{Discussion}
+\label{s:discussion}
+From the aggregation cube in Figure \ref{fig:cube-aggregation} we can see that there are 8 cases to be considered in our analysis. The goal here is to analyze all cases and find out patterns that could represent the characteristics of a code list, whether the instances are (not) part of a code list, why (not), and whether they could be considered as code list members even though they do not have the defining characteristics.
+
+We have found that if an instance is a \textit{skos:Concept} and part of a \textit{skos:ConceptScheme} then it is by definition a code list member and the \textit{skos:ConceptScheme} is the code list, regardless of whether they have a class or not. There are, however, several cases, e.g., \textit{txn:Status\_Preliminary}, \textit{txn:Status\_Testing}, \textit{txn:TaxonConcept\_Scheme}, \textit{pc:Negotiated}, \textit{pc:Open},  \textit{mil:Cavalry},  \textit{mil:Rank\_Private}, where the instance is a \textit{skos:Concept} but not part of a \textit{skos:ConceptScheme}. These are probably desolate instances that do not belong to a higher categorization, but still count as codes, and the last reason being simply the link to \textit{skos:ConceptScheme} is unintentionally missing.
+
+Another observation is regarding the fact that there are instances that have a \textit{skos:ConceptScheme} as their class. These of course are the code lists themselves, but not codes of a code list. 
+
+There are also cases where the \textit{skos:ConceptScheme} and the class have similar naming, e.g., \textit{lawd:Reading} and \textit{lawd:readingScheme}. This could mean that the class being instantiated by the codes may theoretically have the same function as the \textit{skos:ConceptScheme} semantically.
+
+The next case is where the instance has a class but is not modeled entirely using SKOS. There are four types of modeling decisions happening here:
+\begin{enumerate}
+    \item the class implicitly defines a code list as if it were a \textit{skos:ConceptScheme} while the instances are modeled as \textit{skos:Concept}, examples of this case can be found in the Military ontology, e.g. the class \textit{mil:MilitaryRank} and its instances like \textit{mil:Rank\_Private}, \textit{mil:Rank\_Polkovnik}
+    \item the class implicitly (and semantically) defines a code list with its instances enumerating obvious codes without the link to \textit{skos:Concept}, e.g., the classes \textit{geop:geographical\_region}, \textit{keys:Key}, \textit{te:TemporalUnit}, \textit{gr:DayOfWeek}, \textit{rlog:Level}, \textit{pso:PublicationStatus},
+    \item the instance is a metadata instance used for an annotation property, in this case, it is highly probable that the class comes from a foreign namespace, e.g. \textit{foaf:Person} for contact info,
+    \item the instance is an exemplary instance of a class for showcasing purposes, e.g., \textit{ostop:scotland}, in which case this class should be from the same namespace as the instance.
+\end{enumerate}
+
+The last case is when an instance does not have a class nor is modeled as SKOS. These are instances of one of the classes in Code listing \ref{lst:sparql13}, which are not relevant in finding code lists, and therefore are ignored during the querying process.
+
+The multi-dimensional analysis in Section~\ref{s:analysis_code_list_modeling_practice} represented a complementary view on the individuals from LOV vocabularies, with respect to the SPARQL extraction patterns from Section~\ref{s:codelistanalyzer}.
+It lead us to also checking whether the `negatives' wrt. the queries are true or false negatives, i.e., brought us at least qualitative (and satisfactory) insights related to the recall of these queries: the individuals not covered by the queries do not appear as codes making part of code lists.
+%Since the tooling used in the multi-dimensional analysis was not confined to SPARQL, we added the namespace correspondence as a third dimension, which 
+
+
+%\begin{table}[]
+%\footnotesize
+%\centering
+%\begin{tabular}{|l|l|}
+% \hline
+%owl:Thing              & skos:ConceptScheme \\ \hline
+%owl:Ontology           & voaf:Vocabulary    \\ \hline
+%owl:NamedIndividual    & rdf:Property       \\ \hline
+%owl:ObjectProperty     & rdfs:Class         \\ \hline
+%owl:AnnotationProperty & owl:Class          \\ \hline
+%owl:DatatypeProperty   & rdfs:Datatype      \\ \hline
+%owl:OntologyProperty   & rdfs:Resource      \\ \hline
+%\end{tabular}
+%\caption{List of ignored classes}
+%\label{tab:ignored classes}
+%\end{table}
+
+
+%1 - skriptem
+
+%2 - multidimenzialne predtim nenapadla (shoda namespace)
+
+
+
