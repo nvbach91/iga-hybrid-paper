@@ -3,75 +3,83 @@
 \label{s:skos_codelist_collecting}
 We have used the proposed queries to detect all candidate code lists in the LOV catalog. The next step is to query the details of those code lists and create a new dataset solely consisting of code lists and their codes.
 
-We retrieved all code list structures from each vocabulary in LOV (if available) in the form of RDF triples using a SPARQL CONSTRUCT query for each detected code list IRI (Code listing \ref{lst:sparql6}). Metadata and detailed information of each code are then retrieved separately using another SPARQL query.
+We retrieved all code list structures from each vocabulary in LOV (if available) in the form of RDF triples using a SPARQL CONSTRUCT query for each detected code list IRI (Code listing \ref{lst:sparql6}). %Metadata and detailed information 
+Labels and comments of each entity are also retrieved using OPTIONAL clauses in the implemented version of the same SPARQL query (not shown here). We also extract the assignment properties because we want to provide the users with information on how to use the code lists as originally intended.
 
 \medskip
 \medskip
 \medskip
 
-\begin{lstlisting}[captionpos=b, caption=Query to gather all code lists and annotate them with SKOS,label=lst:sparql6,basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[captionpos=b, caption=Query to gather all code lists and annotate them with SKOS,label=lst:sparql6,basicstyle=\small\ttfamily,frame=single]
 CONSTRUCT {
-  ?codelist a skos:ConceptScheme .
-  ?c1 a skos:Concept .
-  ?c1 skos:inScheme ?codelist .
-  ?c1 ?p ?c2 .
-}
-FROM <${vocab}> WHERE {
-  BIND(<${codelist}> AS ?codelist)
-  ?c1 a ?codelist .
-  OPTIONAL { ?c2 a ?codelist . ?c1 ?p ?c2 . }
+  ?codeList a skos:ConceptScheme .
+  ?code1 a skos:Concept . 
+  ?code1 skos:inScheme ?codeList .
+  ?code1 ?p ?code2 .
+  ?code2 a skos:Concept .
+  ?ap rdfs:range ?codeList . 
+  ?ap rdfs:domain ?dt .
+  ?ap a ?apType .
+  <${vocab}> a owl:Ontology .
+} FROM <${vocab}> WHERE {
+  BIND(<${codeList}> AS ?codeList)
+  ?code1 a ?codeList .
+  FILTER NOT EXISTS { ?code1 a owl:Ontology }
+  OPTIONAL { ?code2 a ?codeList .
+             ?code1 ?p ?code2 . }
+  OPTIONAL {
+    ?ap rdfs:range ?codeList . 
+    OPTIONAL { ?ap a ?apType . }
+    OPTIONAL { ?ap rdfs:domain ?dt . }
+  }
 }
 \end{lstlisting}
 
-The retrieved code lists and codes are annotated with \textit{skos:Concept}, \textit{skos:ConceptScheme} and \textit{skos:inScheme} to facilitate SKOS-based querying. The RDF data are then uploaded to a triple store and this new dataset contains 13,795 triples, 306 code lists and 2864 codes. In order to get a list of code lists, the following SPARQL query can be used:
+The retrieved code lists and codes are annotated with \textit{skos:Concept}, \textit{skos:ConceptScheme} and \textit{skos:inScheme} to facilitate SKOS-based querying. The RDF data are then uploaded to a triplestore and this new dataset contains 117\,205 triples, 1\,078 assignment properties, 1\,517 code lists, and 16\,448 codes\footnote{\url{https://github.com/nvbach91/iga-hybrid/tree/master/codelists} (includes scripts to reproduce results)}. In order to retrieve a list of code lists, the following SPARQL query can be used:
 
-\begin{lstlisting}[captionpos=b, caption=Query to get a list of code lists,label=lst:sparql7,basicstyle=\ttfamily,frame=single]
-SELECT * WHERE  {
-  ?codelist a skos:ConceptScheme .
-}
+\begin{lstlisting}[captionpos=b, caption=Query to get a list of code lists,label=lst:sparql7,basicstyle=\small\ttfamily,frame=single]
+SELECT DISTINCT * WHERE  {
+  ?codeList a skos:ConceptScheme . }
 \end{lstlisting}
 
 To get all codes and their respective code lists, we then use the following SPARQL query:
 
-\begin{lstlisting}[captionpos=b, caption=Query to get all code lists with codes,label=lst:sparql8,basicstyle=\ttfamily,frame=single]
-SELECT * WHERE  {
-  ?codelist a skos:ConceptScheme .
+\begin{lstlisting}[captionpos=b, caption=Query to get all code lists with codes,label=lst:sparql8,basicstyle=\small\ttfamily,frame=single]
+SELECT DISTINCT * WHERE  {
+  ?codeList a skos:ConceptScheme .
   ?code a skos:Concept .
-  ?code skos:inScheme ?codelist .
-}
+  ?code skos:inScheme ?codeList . }
 \end{lstlisting}
 
-We have also mentioned that there might be a relationship between individual codes of the same code list that create a small sub-graph in the whole graph. We can use the following query to get that information.
+We have also mentioned that there might be a relationship between individual codes of the same code list that create a small sub-graph in the whole graph. We can use the following query to fetch that information.
 
 
-\begin{lstlisting}[captionpos=b, caption=Query to capture the structures of code lists,label=lst:sparql9,basicstyle=\ttfamily,frame=single]
-SELECT * WHERE  {
-  ?codelist a skos:ConceptScheme .
+\begin{lstlisting}[captionpos=b, caption=Query to capture the structures of code lists,label=lst:sparql9,basicstyle=\small\ttfamily,frame=single]
+SELECT DISTINCT ?code1 ?p ?code2 WHERE  {
+  ?codeList a skos:ConceptScheme .
   ?code1 a skos:Concept .
-  ?code1 skos:inScheme ?codelist .
+  ?code1 skos:inScheme ?codeList .
   OPTIONAL {
    ?code2 a skos:Concept .
-   ?code2 skos:inScheme ?codelist .
+   ?code2 skos:inScheme ?codeList .
    ?code1 ?p ?code2 .
   }
 }
 \end{lstlisting}
 
-Similarly, we can query for relationships between codes that are parts of different code lists using the following query:
+Similarly, we can query for relationships between codes that are parts of different code lists:% using the following query:
 
-\begin{lstlisting}[captionpos=b, caption=Query to capture the relationships between code list members,label=lst:sparql10,basicstyle=\ttfamily,frame=single]
-SELECT * WHERE  {
-  ?codelist1 a skos:ConceptScheme .
-  ?code1 a skos:Concept .
-  ?code1 skos:inScheme ?codelist1 .
+\begin{lstlisting}[captionpos=b, caption=Query to capture the relationships between members of different code lists,label=lst:sparql10,basicstyle=\small\ttfamily,frame=single]
+SELECT DISTINCT * WHERE  {
+  ?codeList1 a skos:ConceptScheme .
+  ?code1 skos:inScheme ?codeList1 .
   OPTIONAL {
-   ?codelist2 a skos:ConceptScheme .
-   ?code2 a skos:Concept .
-   ?code2 skos:inScheme ?codelist2 .
+   ?codeList2 a skos:ConceptScheme .
+   ?code2 skos:inScheme ?codeList2 .
    ?code1 ?p ?code2 .
   }
-  FILTER(?codelist1 != ?codelist2)
+  FILTER(?codeList1 != ?codeList2)
 }
 \end{lstlisting}
 
-The previous query returns 93 result rows. Examination of these results reveals that relationships exist between the code lists at the code levels. The SPARQL queries in this section is not implemented in Code List Analyzer, but run separately based on manual analysis. %Some of these relationships are however instantiations of an external reused class.
+The previous query returns 93 result rows. Examination of these results reveals that relationships exist between the code lists at the code levels. The SPARQL queries in this section are not implemented in Code List Analyzer, but run separately based on manual analysis. %Some of these relationships are however instantiations of an external reused class.

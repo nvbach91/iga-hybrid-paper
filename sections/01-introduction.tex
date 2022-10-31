@@ -23,7 +23,7 @@ Commonly, as also in this case (but not always), there is a class of which all c
 Aside such ontology-embedded structures, 
 %sometimes also called \emph{value sets} \cite{alanrector}, 
 the term `code list' is used for certain stand-alone datasets. %modeled using the SKOS vocabulary \cite{DBLP:journals/corr/abs-1801-04479}. 
-Stand-alone code lists are being used, among other, in connection with government data %fiscal data where they have been defined as lists of values in a predefined set that can be used in metadata and that help metadata creators in selecting from a set of descriptors, thereby enhancing consistency and helping to avoid errors 
+Stand-alone code lists are being used, among others, in connection with government data %fiscal data where they have been defined as lists of values in a predefined set that can be used in metadata and that help metadata creators in selecting from a set of descriptors, thereby enhancing consistency and helping to avoid errors 
 \cite{guide_code_list}, and modeled with the help of
 %While some studies address the representation of code lists within specific domains using 
 the SKOS vocabulary \cite{miles2009skos}. 
@@ -36,7 +36,7 @@ While the structural patterns and lexical conventions of embedded vs.~stand-alon
 
 %Both can be characterized by the typical structural (and sometimes also lexical) patterns, which could be expressed as SPARQL queries to be used to query vocabulary catalog endpoints and individual knowledge graphs. 
 
-The most tangible contribution of our research is a collection of \emph{SPARQL queries} performing the extraction of embedded code lists from ontologies, currently from the Linked Open Vocabularies knowledge base aka LOV \cite{DBLP:journals/semweb/VandenbusscheAP17}, and a \emph{web application} (named Code List Analyzer) that allows to inspect the results. 
+The most tangible contribution of our research is a collection of \emph{SPARQL queries} performing the extraction of embedded code lists from ontologies, currently from the Linked Open Vocabularies knowledge base aka LOV \cite{DBLP:journals/semweb/VandenbusscheAP17}, and a \emph{web application} (named Code List Analyzer) that allows inspecting the results. 
 %Additional SPARQL queries can then be applied to a knowledge graph (we so far experimented with DBpedia) that would also contain code lists embedded in it.
 
 %For the embedded code lists, we quantify their degree of adoption in comparison to the usage of their respective properties.
@@ -50,12 +50,12 @@ Given a broader perspective, we analyze embedded code lists from three different
 
 The remaining parts of this paper are organized as follows. 
 %In Section 2 we review three structural parts of the semantic web knowledge representation: ontology schemas, code lists, and knowledge graphs, at a general level.  
-In Section \ref{s:codelist-def} we start from an authoritative definition of code list from EU public service guidelines as well as from past research on OWL patterns, and attempt to derive from both a new formulation of versatile patterns characterizing embedded code lists in ontologies. 
-In Section \ref{s:codelistanalyzer} we present an operational set of SPARQL queries based on those patterns, employed for detection and extraction embedded code lists, the enabling tool (Code List Analyzer), and the results achieved when applying this inventory on the LOV ontology collection.
+In Section \ref{s:codelist-def} we start from an authoritative definition of code list from EU public service guidelines as well as from past research on OWL patterns and attempt to derive from both a new formulation of versatile patterns characterizing embedded code lists in ontologies. 
+In Section \ref{s:codelistanalyzer} we present an operational set of SPARQL queries based on those patterns, employed for the detection and extraction of embedded code lists, the enabling tool (Code List Analyzer), and the results achieved when applying this inventory on the LOV ontology collection.
 Section \ref{s:skos_codelist_collecting} explains how the extracted code lists are `SKOSified' for better coherence and interoperability.
-In Section \ref{s:repr} we first demonstrate the dominant nature of embedded codes as ontological universals, and, consequently, discuss three alternatives of representing universals (or, concepts) on the semantic web.
+In Section \ref{s:repr} we first demonstrate the dominant nature of embedded codes as ontological universals, and consequently discuss three alternatives for representing universals (or concepts) on the Semantic Web.
 Section \ref{s:analysis_code_list_modeling_practice} describes a bottom-up analysis complementary to that from Section \ref{s:codelistanalyzer}; it starts from the set of all individuals inside all vocabularies, gradually partitioning their space by distinctive features, and, eventually, mapping these features to patterns from Section \ref{s:codelist-def}.
-Section \ref{s:discussion} consists in a discussion of both quantitative and qualitative results from the previous analysis.
+Section \ref{s:discussion} consists of a discussion of both quantitative and qualitative results from the previous analysis.
 Section \ref{s:related} provides a comparison with related research.
 Finally, Section \ref{s:conclusion} wraps up the paper.
 %and outlines the directions for future work.
