@@ -4,19 +4,19 @@ We are unaware of any research project in the ontology and linked data community
 There have, however, been several partially related projects.
 
 The `value partitions vs. value sets' design pattern by Rector \cite{alanrector}, which we discussed in Section~\ref{s:codelist-def}, analyzed the consequences of using a set of individuals vs. sibling classes for representing pre-defined values of properties.
-This was however an educational resource, not accompanied with an empirical study showing how often is any of the options actually used.
-Also the intended usage (assigning individuals to expressions from richly axiomatized ontologies) was slightly different from that foreseen for code lists.
+This was however an educational resource, not accompanied by an empirical study showing how often any of the options are actually used.
+Also, the intended usage (assigning individuals to expressions from richly axiomatized ontologies) was slightly different from that foreseen for code lists.
 
 Abdul Manaf et al. \cite{Yati_eswc12} studied a large set of SKOS vocabularies on the web.
-They concluded that some vocabularies do not fulfill the expectations on a thesaurus, as they do not have the usual lexical labels (such as \emph{skos:prefLabel}) and may also not contain a hierarchy.
+They concluded that some vocabularies do not fulfill the expectations of a thesaurus, as they do not have the usual lexical labels (such as \emph{skos:prefLabel}) and may also not contain a hierarchy.
 We conjecture that some of those SKOS structures may actually correspond to code lists.
-Later on, Abdul Manaf in her thesis also elaborated on the problem of converting OWL hierarchies to SKOS taxonomies \cite{Yati-thesis}; this approach corresponds, to a certain degree, to bridging between two of the approaches we study in our analysis.
+Later on, Abdul Manaf in her thesis also elaborated on the problem of converting OWL hierarchies to SKOS taxonomies \cite{Yati-thesis}; this approach corresponds, to a certain degree, to bridge between two of the approaches we study in our analysis.
 
-A detailed study related to the occurrence and acceptance of SKOS for representing existing knowledge organization systems and exposing them on the semantic web was also carried out, with special focus on social aspects of such an adoption \cite{DBLP:journals/corr/abs-1801-04479}.
+A detailed study related to the occurrence and acceptance of SKOS for representing existing knowledge organization systems and exposing them on the Semantic Web was also carried out, with a special focus on social aspects of such an adoption \cite{DBLP:journals/corr/abs-1801-04479}.
 
 
 The topic of code list extraction was covered by the OpenBudgets.org project \cite{DBLP:conf/icwe/MusyaffaHLOJAV18}, where RDF code lists were extracted automatically, through pipeline-based tools, from non-RDF resources (most often in the CSV format) \cite{DBLP:conf/smap/FilippidisKKIB16}.
 Since the core fiscal data processed in the project were modeled according to the Data Cube vocabulary \cite{data_cube}, these code lists were not primarily intended for cross-domain use but rather connected to fiscal data components (dimensions of multi-dimensional data cubes).
 
 As regards the problems related to the interplay of upward and downward links of concepts corresponding to both subsumption and instantiation relationships, which we analyze and illustrate in Section~\ref{s:repr}, they have been thoroughly studied by the authors of the Multi-Level Theory \cite{conf/er/AlmeidaFC17}, as well as in other approaches to multi-level modeling \cite{journals/dagstuhl-reports/AlmeidaFK17}.
-Our study is definitely light-weight as regards the study of phenomena arising in the presence of multiple levels in a knowledge base, in general, and focuses on the real-world practice in certain OWL ontologies, code lists and knowledge graphs.
+Our study is definitely lightweight as regards the study of phenomena arising in the presence of multiple levels in a knowledge base, in general, and focuses on the real-world practice in certain OWL ontologies, code lists, and knowledge graphs.
