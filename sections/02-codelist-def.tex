@@ -1,12 +1,12 @@
 \section{Candidate code list patterns in RDF / OWL}
 \label{s:codelist-def}
 
-The notion of code list does not formally belong to the central ones in the semantic web: it does not appear, at least not under such a calling, anywhere in the core W3C recommendations (e.g., for RDF, OWL or SPARQL). 
-Therefore, we decided to depart from the definition formulated in a highly authoritative document created in a specific corner of the semantic web field: the EU-endorsed \emph{Guidelines for the Use of Code Lists} \cite{guide_code_list} designed for  \emph{metadata management in public administration}; while RDF is considered as a possible technology for code list representation, it does not have an exclusive nor dominant position there. 
+The notion of code list does not formally belong to the central ones in the Semantic Web: it does not appear, at least not under such a calling, anywhere in the core W3C recommendations (e.g., for RDF, OWL or SPARQL). 
+Therefore, we decided to depart from the definition formulated in a highly authoritative document created in a specific corner of the Semantic Web field: the EU-endorsed \emph{Guidelines for the Use of Code Lists} \cite{guide_code_list} designed for  \emph{metadata management in public administration}; while RDF is considered as a possible technology for code list representation, it does not have an exclusive nor dominant position there. 
 The purpose of this section is then to project the retrieved definition to the representation space of OWL ontologies (and, comparatively, instance-level RDF knowledge graphs) as our target in this paper.
 
 Having said that, we however acknowledged a W3C note addressing a topic very similar to our notion of code list while not using this term: A.~Rector's treatment of `Representing Specified Values', from 2005 \cite{alanrector}. 
-We will align our analysis with it, though arriving at slightly different engineering choices due to both the development of the semantic web landscape in the meantime and to the difference in focus: primarily inference-heavy ontologies in Rector's case, and mostly lightweight linked data vocabularies in our case, the latter assuming the straightforward assignment of values to properties unconstrained by many ontological commitments in the Tbox.
+We will align our analysis with it, though arriving at slightly different engineering choices due to both the development of the Semantic Web landscape in the meantime and to the difference in focus: primarily inference-heavy ontologies in Rector's case, and mostly lightweight linked data vocabularies in our case, the latter assuming the straightforward assignment of values to properties unconstrained by many ontological commitments in the Tbox.
 
 The guidelines document \cite{guide_code_list}, developed under the EU SEMICS Action (addressing semantic interoperability), defines code lists as ``lists of \emph{values} in a \emph{predefined set} that can be used in metadata and that help metadata creators in \emph{selecting} from a set of descriptors, thereby enhancing consistency and helping to avoid errors'' (p.~3, italics purposefully added for notions that are pivotal for our purpose). 
 
@@ -36,7 +36,7 @@ For ontologies (and knowledge graphs) to remain within the tractable OWL DL expr
 
 Of the three possibilities of building the `predefined sets' \cite{guide_code_list}, we will immediately rule out the \emph{literals}.
 Foremost, we do not normally find them in ontologies in the form of custom data types.
-Second, more generally, the role of literals on the semantic web is primarily in the interaction with human users. 
+Second, more generally, the role of literals on the Semantic Web is primarily in the interaction with human users. 
 While textual values may play the role of codelists in some RDF datasets, the fact that they are not globally unique identifiers (as IRIs) significantly compromises their machine-based interoperability.
 
 Sets of \emph{classes}, if embedded in the form of Rector's value partition pattern, can surely be interpreted as code lists.
@@ -106,6 +106,7 @@ Based on the considerations from this section, we may characterize the candidate
 %    \item The individuals are OPTIONALLY declared as different individuals (through \emph{owl:differentFrom} or \emph{owl:allDifferent}).
 %    \item The individuals are OPTIONALLY instances of a class \emph{enumerating them} (through \emph{owl:oneOf}).
 \end{itemize}
-This (`fuzzy') pattern will be reflected in the subsequent formulation of SPARQL queries aiming to retrieve the relevant structures from real vocabularies (Section~\ref{s:codelistanalyzer}).
+Notably, we did not aim at a rigorous formal definition of a code list: first, because  opinions on this under-explored notion might vary in the Semantic Web community in general, and second, because the syntactic features alone might not be sufficient to guarantee the code list status of a structure. The characterization above is thus merely an approximate pattern for code list \emph{candidate} generation.
+The pattern will be reflected in the subsequent formulation of SPARQL queries aiming to retrieve the relevant structures from real vocabularies (Section~\ref{s:codelistanalyzer}).
 Note that the technique \textbf{T2} is only included as optional, as it is redundant for code list extraction with respect to \textbf{T1} (i.e., ``if there is an assignment property in the ontology, there is also a filler class''). 
 %However, we will take the assignment property into consideration in the bottom-up analysis covering all individuals (Section~\ref{s:analysis_code_list_modeling_practice}).

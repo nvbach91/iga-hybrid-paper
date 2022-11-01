@@ -1,16 +1,12 @@
-\section{Collecting code lists and applying SKOS}
+\section{Collecting code lists, applying SKOS, and manual analysis}
 %We used our proposed workflow to query and analyze additional open datasets with an available SPARQL endpoint found in SPARQLES \cite{DBLP:journals/semweb/VandenbusscheUM17}. The experiment involved a total of 166 SPARQL endpoints that were marked as available in SPARQLES. The full list of used queried endpoints is available in our GitHub repository.
 \label{s:skos_codelist_collecting}
-We have used the proposed queries to detect all candidate code lists in the LOV catalog. The next step is to query the details of those code lists and create a new dataset solely consisting of code lists and their codes.
+We have used the proposed queries to detect all candidate code lists in the LOV catalog. The next step is to extract the details of those code lists and create a new dataset solely consisting of candidate code lists and their codes for the subsequent manual analysis. The manual analysis of candidate code lists is described in the second part of this section.
 
-We retrieved all code list structures from each vocabulary in LOV (if available) in the form of RDF triples using a SPARQL CONSTRUCT query for each detected code list IRI (Code listing \ref{lst:sparql6}). %Metadata and detailed information 
-Labels and comments of each entity are also retrieved using OPTIONAL clauses in the implemented version of the same SPARQL query (not shown here). We also extract the assignment properties because we want to provide the users with information on how to use the code lists as originally intended.
+\subsection{Constructing the code list dataset}
+First, we retrieve all candidate code list structures from each vocabulary in LOV (if available) in the form of RDF triples using a SPARQL CONSTRUCT extraction query for each detected code list IRI in each vocabulary (see Code listing \ref{lst:sparql6}).
 
-\medskip
-\medskip
-\medskip
-
-\begin{lstlisting}[captionpos=b, caption=Query to gather all code lists and annotate them with SKOS,label=lst:sparql6,basicstyle=\small\ttfamily,frame=single]
+\begin{lstlisting}[captionpos=b, caption=Query to extract candidate code lists and annotate them with SKOS,label=lst:sparql6,basicstyle=\small\ttfamily,frame=single]
 CONSTRUCT {
   ?codeList a skos:ConceptScheme .
   ?code1 a skos:Concept . 
@@ -35,14 +31,17 @@ CONSTRUCT {
 }
 \end{lstlisting}
 
-The retrieved code lists and codes are annotated with \textit{skos:Concept}, \textit{skos:ConceptScheme} and \textit{skos:inScheme} to facilitate SKOS-based querying. The RDF data are then uploaded to a triplestore and this new dataset contains 117\,205 triples, 1\,078 assignment properties, 1\,517 code lists, and 16\,448 codes\footnote{\url{https://github.com/nvbach91/iga-hybrid/tree/master/codelists} (includes scripts to reproduce results)}. In order to retrieve a list of code lists, the following SPARQL query can be used:
+ %Metadata and detailed information 
+Labels and comments of each entity are also queried in OPTIONAL clauses of the implemented version of the same SPARQL CONSTRUCT query (not shown here). We also extract the assignment properties and the domain entities because we want to provide the users with contextual information on how to use the code lists as originally intended. 
+
+The retrieved candidate code lists and codes are annotated with \textit{skos:Concept}, \textit{skos:ConceptScheme}, and \textit{skos:inScheme} to facilitate SKOS-based querying. The RDF data are then uploaded to a triplestore and this new dataset contains 117\,205 triples, 1\,078 assignment properties, 1\,517 candidate code lists, and 16\,448 codes\footnote{\url{https://github.com/nvbach91/iga-hybrid/tree/master/codelists} (includes scripts to reproduce results)}. In order to retrieve a list of candidate code lists, the SPARQL query in Code listing \ref{lst:sparql7} can be used to query this dataset.
 
 \begin{lstlisting}[captionpos=b, caption=Query to get a list of code lists,label=lst:sparql7,basicstyle=\small\ttfamily,frame=single]
 SELECT DISTINCT * WHERE  {
   ?codeList a skos:ConceptScheme . }
 \end{lstlisting}
 
-To get all codes and their respective code lists, we then use the following SPARQL query:
+To get all codes and their respective code lists, we can use the SPARQL query in Code listing \ref{lst:sparql8}.
 
 \begin{lstlisting}[captionpos=b, caption=Query to get all code lists with codes,label=lst:sparql8,basicstyle=\small\ttfamily,frame=single]
 SELECT DISTINCT * WHERE  {
@@ -51,7 +50,7 @@ SELECT DISTINCT * WHERE  {
   ?code skos:inScheme ?codeList . }
 \end{lstlisting}
 
-We have also mentioned that there might be a relationship between individual codes of the same code list that create a small sub-graph in the whole graph. We can use the following query to fetch that information.
+We have also mentioned that there can exist relationships between individual codes of the same code list which together create small sub-graphs in the dataset. We can use the SPARQL query in Code listing \ref{lst:sparql9} to fetch this information.
 
 
 \begin{lstlisting}[captionpos=b, caption=Query to capture the structures of code lists,label=lst:sparql9,basicstyle=\small\ttfamily,frame=single]
@@ -67,19 +66,206 @@ SELECT DISTINCT ?code1 ?p ?code2 WHERE  {
 }
 \end{lstlisting}
 
-Similarly, we can query for relationships between codes that are parts of different code lists:% using the following query:
+Similarly, we can query for relationships between codes that are parts of different code lists using the SPARQL query in Code listing \ref{lst:sparql10}.
 
 \begin{lstlisting}[captionpos=b, caption=Query to capture the relationships between members of different code lists,label=lst:sparql10,basicstyle=\small\ttfamily,frame=single]
 SELECT DISTINCT * WHERE  {
   ?codeList1 a skos:ConceptScheme .
   ?code1 skos:inScheme ?codeList1 .
-  OPTIONAL {
-   ?codeList2 a skos:ConceptScheme .
-   ?code2 skos:inScheme ?codeList2 .
-   ?code1 ?p ?code2 .
-  }
+  OPTIONAL { ?codeList2 a skos:ConceptScheme .
+             ?code2 skos:inScheme ?codeList2 .
+             ?code1 ?p ?code2 . }
   FILTER(?codeList1 != ?codeList2)
 }
 \end{lstlisting}
 
-The previous query returns 93 result rows. Examination of these results reveals that relationships exist between the code lists at the code levels. The SPARQL queries in this section are not implemented in Code List Analyzer, but run separately based on manual analysis. %Some of these relationships are however instantiations of an external reused class.
+This query returns 2\,179 result rows. Our examination of these results confirms that relationships exist between the code lists at the code levels.
+
+The SPARQL queries in this section are not implemented in Code List Analyzer but run separately as part of our manual analysis. %Some of these relationships are however instantiations of an external reused class.
+
+\subsection{Manual evaluative analysis of code lists}
+\label{s:manual}
+The results achieved by the parameterized SPARQL CONSTRUCT query are not yet considered to be consisting of 100\% of code lists. As part of our preliminary examination, we can find in the dataset examples of entities that are not code lists by their meanings. %(semantically or as intended by the authors). 
+A representative example of these exceptions is shown in Code listing \ref{lst:code-list-exceptions}.
+
+\begin{lstlisting}[captionpos=b,caption=Exception example in the extracted code list dataset,label=lst:code-list-exceptions,basicstyle=\footnotesize\ttfamily,frame=single]
+PREFIX fbw: <https://www.th-brandenburg.de/~/fbw/>
+PREFIX wikidata: <http://www.wikidata.org/entity/>
+PREFIX org: <https://schema.org/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+wikidata:Q1391182 a org:Organization .
+fbw:vera-meister a org:Person .
+<https://bmake.th-brandenburg.de/spv#>
+    a owl:Ontology ;
+    dc:publisher wikidata:Q1391182, fbw:vera-meister  ;
+    dc:creator fbw:vera-meister  .
+\end{lstlisting}
+
+Entities \texttt{wikidata:Q1391182} and \texttt{fbw:vera-meister} here are not considered code list members because these instances are concrete, real-world entities representing a real organization and a real person,
+%. Also, in this case, they
+which are used in the SPVQA ontology\footnote{\url{https://bmake.th-brandenburg.de/spv}} as metadata (such as the information about the authors, contributors, publishers, etc.) to describe the ontology.
+
+In view of such cases, we eventually decided to carry out exhaustive manual scrutiny of all extracted candidate code lists, to have a representative quantification of the code list extraction precision.
+While the overall number of codes was high (over 16\,000 unique codes), the whole effort was actually feasible (about 10 hours in total), since in many cases it was sufficient to analyze one item of a candidate code list, while the remaining ones were apparently of the same nature.
+%To be able to identify all invalid cases in the extracted code list dataset, we follow the following simple procedure\footnote{This is a procedure that we have undertaken and it is not a process that we would advise others to do because the process is very much time-consuming and might require some erudition in understanding the notion of code lists.}:
+The undertaken process was as follows:
+\begin{enumerate}
+    \item We generated a table of code lists from all vocabularies, including the codes and their incoming links.
+    \item For each code list, we went through the codes
+    %one by one manually 
+    and (if needed) fetched the detailed information of a code and the code list from the original LOV SPARQL endpoint.
+%    \item Write a note to each entity explaining why it is not a valid code list while considering the meaning of the codes and the modeling decisions of the authors.
+    \item We made the final verdict about the code list status, using common sense. Essentially, we assessed whether it makes sense to assign the codes in bulk, via assignment properties, to entities from various datasets.  
+\end{enumerate}
+In most cases the judgment was straightforward. 
+It was only for seven candidate code lists that a more thorough discussion among the two paper authors was needed, and the consensus was obtained even for these cases.
+
+To generate the code list overview table for this manual analysis, we use the query in Code listing \ref{lst:sparql14}. %\footnote{at \url{https://fcp.vse.cz/blazegraphpublic/\#query}, \\ select namespace \texttt{codelists} in the namespaces tab}:
+\begin{lstlisting}[captionpos=b, caption=Query to generate a table overview of code lists including codes and their incoming links,label=lst:sparql14,basicstyle=\small\ttfamily,frame=single]
+SELECT DISTINCT ?v ?cl ?s ?p ?c WHERE  {
+  ?cl a skos:ConceptScheme .
+  ?c skos:inScheme ?codeList .
+  ?c rdfs:isDefinedBy ?v .
+  OPTIONAL { ?s ?p ?c } .
+} ORDER BY ?v ?cl ?c
+\end{lstlisting}
+
+This query retrieves every candidate code list in the dataset including incoming links and the results are sorted by the vocabularies, code lists, and codes. A sample result of this query is shown in Table \ref{tab:code-list-overview-results}\footnote{\label{full-code-list-table-overview}The full generated table including the manual analysis comments is available at \url{https://github.com/nvbach91/iga-hybrid/tree/master/codelists/results}}.
+
+\begin{table}[ht]
+\footnotesize
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{\texttt{?cl}} & \textbf{\texttt{?s}} & \textbf{\texttt{?p}} & \textbf{\texttt{?c}} \\ \hline \hline
+\textbf{Code list}    & \textbf{Inc. subj.}  & \textbf{Inc. prop.}  & \textbf{Code}        \\ \hline
+gr:DayOfWeek          & gr:Saturday          & gr:hasPrevious       & gr:Friday            \\ \hline
+gr:DayOfWeek          & gr:Thursday          & gr:hasNext           & gr:Friday            \\ \hline
+gr:DayOfWeek          & gr:Sunday            & gr:hasPrevious       & gr:Saturday          \\ \hline
+gr:DayOfWeek          & gr:Friday            & gr:hasNext           & gr:Saturday          \\ \hline
+gr:DayOfWeek          & gr:Monday            & gr:hasPrevious       & gr:Sunday            \\ \hline
+gr:DayOfWeek          & gr:Saturday          & gr:hasNext           & gr:Sunday            \\ \hline
+%...                   & ...                  & ...                  & ...                  \\ \hline
+\end{tabular}
+\caption{Sample of the code list overview table from the GoodRelations ontology  analysis (formatted)} \label{tab:code-list-overview-results}
+%\vspace{-6mm}
+\end{table}
+
+While the overall process of manual analysis was not carried out in an experimentally rigorous manner, we believe that independent experts would arrive to a very similar assignment of verdicts, since nearly all negative cases (see below) were quite obvious and easy to spot, while for the positive ones it would be hard to argue that they could not serve as code lists under some circumstances.
+As intuitive codes in semantic terms we identified for example:
+\begin{itemize}
+    \item Units of measure
+    \item Physical quantities
+    \item Categorized quantitative values
+    \item Geographical locations
+    \item Thematic areas
+    \item Technologies (by which something can be, e.g., created -- the code thus indicating a kind of provenance)
+    \item Substances and materials
+    \item Functions and activities
+    \item Types of objects\footnote{This means, unarguable  \emph{ontological universals}, in contrast to the previous items in this list, which can be at least to some degree viewed as ontological particulars.} meta-modeled as \emph{syntactic individuals}.
+\end{itemize}
+
+In the generated overview table of code lists\cref{full-code-list-table-overview}, we have written notes explaining the reason why we do not consider the entities to be a code list. In summary, we have identified several categories of these exceptions as the following conditions:
+
+\begin{enumerate}
+    \item C1: the instances are blank nodes, 
+    \item C2: the instances are concrete entities which serve as embedded data inside the ontology,\footnote{\label{semsur-vocab}i.e. in the ontology \url{http://purl.org/SemSur/}}
+    \item C3: the instances are concrete entities that serve as metadata values of the ontology as a whole,
+    \item C4: the instances are concrete entities that serve as examples of class instantiation in the ontology,
+    \item C5: the instances are instantiations of meta-level classes\footnote{\label{meta-level-classes}The full list of these meta-level classes and meta-level property classes is available at \url{https://github.com/nvbach91/iga-hybrid/tree/master/codelists/results}},
+    \item C6: the instances are instantiations of meta-level property classes\cref{meta-level-classes},
+\end{enumerate}
+
+%our procedure so we can have quality dataset
+
+%In the condition C5, the mentioned meta level classes identified in the dataset are 
+%\texttt{owl:Class}
+%\texttt{rdfs:Class}
+%\texttt{dcterms:AgentClass}
+%\texttt{dcterms:Agent}
+%\texttt{dcterms:TypeScheme}
+%\texttt{foaf:Agent}
+%\texttt{foaf:Organization}
+%\texttt{skos:ConceptScheme}
+%\texttt{skos:Concept}
+%\texttt{rdf:List}
+
+
+%\texttt{owl:SymetricObjectProperty}
+%\texttt{owl:AnnotationProperty}
+%\texttt{owl:DatatypeProperty}
+%\texttt{owl:ObjectProperty}
+%\texttt{rdf:Property}.
+
+In the analyzed data, there are instances for which multiple of the above conditions are true, e.g., the instance is a blank node (1) and the class it instantiates is a meta-level class (5). The quantifications of instances, code lists, and vocabularies for each condition are displayed in Table \ref{tab:non-code-list-conditions}.
+
+% this table's data can be obtained in the table_overview_manual_analysis excel file
+% https://github.com/nvbach91/iga-hybrid/tree/master/codelists/results
+% lists: unique code list codes, unique code lists, unique vocabs
+\begin{table}[ht]
+\footnotesize
+\centering
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Condition}     & \textbf{Instances}   & \textbf{Code lists} & \textbf{Vocabularies} \\ \hline
+C5                     & 23                   &  8                  &  11                    \\ \hline
+C2 \& C5               & 2                    &  2                  &  1                    \\ \hline
+C5 \& C6               & 80                   &  2                  &  2                    \\ \hline
+C4                     & 4                    &  3                  &  3                    \\ \hline
+C2                     & 299                  &  29                 &  2                    \\ \hline
+C1                     & 76                   &  11                 &  7                    \\ \hline
+C1 \& C5               & 8                    &  1                  &  1                    \\ \hline
+C6                     & 88                   &  10                 &  3                    \\ \hline
+C3                     & 14                   &  10                 &  8                    \\ \hline
+-                      & 15\,831              &  1441               &  189                  \\ \hline \hline
+\textbf{Total}         & \textbf{16\,425}     &  \textbf{1\,517}    &                       \\ \hline
+\textbf{Success rate}  & \textbf{96.38\%}     &  \textbf{94.99\%}   &                       \\ \hline
+\end{tabular}
+\caption{Quantification of categories of conditions for instances not being code list members} \label{tab:non-code-list-conditions}
+%\vspace{-6mm}
+\end{table}
+
+Overall, our code extraction procedure has produced a code list dataset where 96.38\% of the unique class instances are code list members. The remaining 3.62\% are not code list members according to the manual analysis of individual codes.
+
+In Table \ref{tab:non-code-list-conditions}, the 299 instances for condition C2 originate from the SemSur ontology\cref{semsur-vocab} where they are instance-level data embedded in the ontology. Embedding instance-level data in ontologies is not a common practice. In a conference article \cite{DBLP:conf/i-semantics/FathallaVA018} that introduces the SemSur ontology, the authors have decided to include these instance-level data in the ontology as a motivating scenario to better understand the domain of SemSur and to build test cases for inferencing.
+
+While such a manual analysis process can be of course repeated for any new collections of candidate code lists, we primarily performed it in order to formulate patterns allowing us to filter out false candidates automatically.
+To reflect the revealed conditions in our code list extraction pipeline, we have considered including them in the respective queries. Condition C1 can be easily implemented by filtering out all blank nodes using the SPARQL function \texttt{isBlank}. Condition C2 is more complicated to detect automatically. However, C2 is a rare case in terms of modeling decisions for vocabularies, because normally vocabularies should not include instance-level data. In the case of SemSur ontology\cref{semsur-vocab}, these entities are mostly instances of authors and publications. Therefore, for condition C2, we would have to specifically blacklist concrete classes that these data entities instantiate\footnote{e.g. \url{http://www.w3.org/2000/10/swap/pim/contact\#Person} and \url{http://purl.org/semsur/RegularPaper}}. Next, condition C3 can be implemented by ignoring common classes used for ontology metadata, such as \texttt{foaf:Agent} \texttt{schema:Person} from FOAF, Dublin Core, Schema.org, etc. Condition C4 has a rare occurrence (according to Table \ref{tab:non-code-list-conditions} there are only 4 of such cases), but these instances can be spotted easily during manual scanning because most of these instances are usually single and isolated instances in a candidate code list. Condition C5 and C6 can be implemented by ignoring classes in meta-level language vocabularies such as RDF/S, OWL. The reason is that instances of, e.g., \texttt{owl:Class} or \texttt{owl:ObjectProperty} are of course not individuals. %, and also in vocabularies that define classes that are still meant to be on the meta-level such as SKOS, FOAF, and Dublin Core.
+
+To improve the code list results in future iterations of extracting code lists, we have included the above conditions in the extraction query (Code listing \ref{lst:sparql6}) in the form of SPARQL filter clauses shown in Code listing \ref{lst:sparql15}.
+
+\lstset{emph={\#,condition,C1,C2,C3,C4,C5,C6}, emphstyle=\itshape} 
+
+\begin{lstlisting}[captionpos=b, caption=FILTER clauses to improve code list extraction results,label=lst:sparql15,basicstyle=\small\ttfamily,frame=single]
+# 1 -- condition C1
+FILTER(!ISBLANK(?code1))
+
+# 2 -- condition C2
+FILTER(?codeList NOT IN (
+  # concrete classes for condition C2
+))
+
+# 3 -- condition C3 and C5
+VALUES ?class { 
+  dcterms:Agent dc:Agent
+  owl:Class rdfs:Class
+}
+FILTER NOT EXISTS {
+  ?codeList rdfs:subClassOf* ?class
+}
+
+# 4 -- condition C6
+FILTER NOT EXISTS {
+  ?codeList rdfs:subClassOf* rdf:Property
+}
+
+# 5 -- condition C6
+FILTER NOT EXISTS {
+  ?codeList a rdf:Property
+}
+\end{lstlisting}
+
+Among these filter clauses, the first filter removes instances that are blank nodes. The second filter removes specified classes that are instantiated by instance-level data in ontologies. The third filter removes the meta-level classes and classes that are commonly used to describe metadata of ontologies. The fourth and fifth filters remove classes that are used to define properties in ontologies.
+
+With these additional filter clauses included in the extraction queries, we have once more extracted the code lists from the LOV catalog and, upon re-examining the results, we have recreated our code list dataset. This dataset is available on our GitHub repository\footnote{\url{https://github.com/nvbach91/iga-hybrid/tree/master/codelists/results}} and also as a SPARQL endpoint.

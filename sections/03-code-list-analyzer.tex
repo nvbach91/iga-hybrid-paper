@@ -1,14 +1,14 @@
 \section{Candidate code list exploration} 
 \label{s:codelistanalyzer}
 
-We describe here a proof-of-concept experiment, which involves query-based exploration of candidate code lists in the LOV knowledge base, in which we can find the description of RDFS vocabularies and OWL ontologies defined for and used by datasets on the Linked Data Cloud.
+We describe here a proof-of-concept experiment, which involves query-based exploration of candidate code lists in the LOV knowledge base, in which we can find the description of RDF/S vocabularies and OWL ontologies defined for and used by datasets on the Linked Data Cloud.
 
 The goal of this part of our research has been to create and apply a collection of SPARQL queries that can be used in the process of exploring code lists in LOV. % and other knowledge bases as well. %Another specific goal was to identify the coverage of knowledge instances with respect to their abstract concepts. 
 
 \subsection{Query sequence for candidate code list exploration}
-The detection and extraction of code lists in a vocabulary consist of several steps and five main exploratory queries. The exact parameterized SPARQL queries labeled Q1 through Q5 can also be found on the mentioned GitHub repository homepage.
+The exploration of candidate code lists in a vocabulary consists of several steps and five main SPARQL queries. The exact parameterized SPARQL queries labeled Q1 through Q5 including the necessary prefixes can also be found on our GitHub repository\footnote{\url{https://github.com/nvbach91/iga-hybrid}}.
 
-For reproducibility purposes, the steps of this experiment are summarized as follows:
+The general steps of this experiment are summarized as follows:
 
 \begin{enumerate}
     \item Make a list of vocabularies that might contain code lists, sorted by the number of included individuals and classes.
@@ -23,7 +23,7 @@ For reproducibility purposes, the steps of this experiment are summarized as fol
 
 \end{enumerate}
 
-Using this procedure, we collected all candidate code lists for further review. If a result proves to be a code list but does not use \emph{skos:Concept}, we enhance it by connecting the collected codes with \emph{skos:Concept}, and their class with \emph{skos:ConceptScheme} (using SPARQL UPDATE, see Code listing \ref{lst:sparql6}). The enhanced data are then compiled into one knowledge base, which provides simpler and more straightforward access to the code lists thanks to SKOS.
+Using this procedure, we collect all candidate code lists for further review. If a result proves to be a candidate code list but does not use \emph{skos:Concept}, we enhance it by connecting the collected instances with their classes via the \emph{skos:inScheme} property, and annotating them with \emph{skos:Concept} and \emph{skos:ConceptScheme} classes (using SPARQL UPDATE, see Code listing \ref{lst:sparql6}). The enhanced data are then compiled into one knowledge base, which provides simpler and more straightforward access to the candidate code lists thanks to SKOS.
 
 
 
@@ -35,7 +35,7 @@ The queries, especially, Q3 and Q4, are derived from the analysis presented in t
 \medskip
 \noindent\textbf{Q1: Identify the named graph IRIs of the target vocabularies}. This step retrieves a list of vocabulary IRIs and their names. In addition, we also query for the number of classes and class instances in each vocabulary.\footnote{Note that here we are using the \textit{GRAPH} keyword to determine the boundaries in which we count the classes and class instances for each vocabulary. This is thanks to the fact that LOV maintains each vocabulary in a separate graph. Another intuitive approach to get the same results is to use the \textit{rdfs:isDefinedBy} property. However, this approach is unreliable because not all vocabularies use this property to define their terms. To make it reliable, we would have to enhance the data by adding it to all the terms in each vocabulary. This can be done using
 %keyword some vocabularies are not listed here even though they include class instances. This is because this query assumes the classes have the property \textit{rdfs:isDefinedBy} so that their number can be counted for each vocabulary. This can be fixed by 
-query Q0 (described in our GitHub repository README) before running query Q1. However, this would require setting up a custom endpoint with SPARQL UPDATE feature enabled. Also, we only retrieve English labels or labels with no specified language.} In LOV, the total number of vocabularies having at least one class instance is 271 (out of all 818 vocabularies). A part of the results for this query is displayed in Table \ref{tab:q1-results}, which lists the top vocabularies with the highest number of class instances. The number of classes and instances indicates the probability of code lists existing in each vocabulary and helps to set the priority for analyzing each vocabulary. Vocabularies that have a low number of classes and instances will probably be less likely to include code lists. %This way, the analysis procedure would find the majority of code lists in the targeted knowledge base sooner.
+query Q0 (available in our GitHub repository) before running query Q1. However, this would require setting up a custom endpoint with SPARQL UPDATE feature enabled. Also, here we only retrieve English labels to not distract the users when browsing the code lists.} In LOV, the total number of vocabularies having at least one class instance is 271 (out of all 818 vocabularies). A part of the results for this query is displayed in Table \ref{tab:q1-results}, which lists the top vocabularies with the highest number of class instances. The number of classes and instances indicates the probability of code lists existing in each vocabulary and helps to set the priority for analyzing each vocabulary. Vocabularies that have a low number of classes and instances will probably be less likely to include code lists. %This way, the analysis procedure would find the majority of code lists in the targeted knowledge base sooner.
 
 \begin{lstlisting}[captionpos=b, caption=Q1 -- Query to get a list of vocabularies with class count and class instance count,label=lst:sparql1,basicstyle=\small\ttfamily,frame=single]
 SELECT DISTINCT ?v
@@ -64,51 +64,51 @@ WHERE {
 \centering
 \begin{tabular}{|l|l|r|r|}
 \hline
-\textbf{\texttt{?vps}} & \textbf{\texttt{?vls}}                      & \textbf{\texttt{?nc}} & \textbf{\texttt{?ni}} \\ \hline
+\textbf{\texttt{?vps}} & \textbf{\texttt{?vls}}                  & \textbf{\texttt{?nc}} & \textbf{\texttt{?ni}} \\ \hline
 \hline
-\textbf{Prefix} & \textbf{Label}                                                                 & \textbf{Class} & \textbf{Inst.} \\ \hline
-losp       & Linked open specialities RF                                                                     & 6    & 2\,009 \\ \hline
-cfp        & Climate and Forecast standard                                                                   & 48   & 1\,972 \\ \hline
-cff        & Climate and Forecast features                                                                   & 48   & 1\,666 \\ \hline
-oum        & Ontology of units of Measure                                                                    & 1\,078 & 1\,601 \\ \hline
-ifc        & IFC4\_ADD1                                                                                      & 1\,395 & 1\,155 \\ \hline
-cwrc       & The CWRC Ontology                                                                               & 124  & 823  \\ \hline
-gn         & The Geonames ontology                                                                           & 7    & 699  \\ \hline
-ids        & IDS Information Model                                                                           & 290  & 675  \\ \hline
-mil        & The Muninn Military Ontology                                                                    & 142  & 667  \\ \hline
-semsur     & SemSur, Version 2.0                                                                             & 3\,890 & 329  \\ \hline
-common     & The Delivery Context Ontology                                                                   & 150  & 314  \\ \hline
-geop       & Geopolitical Ontology                                                                           & 11   & 312  \\ \hline
-uniprot    & Uniprot Core Ontology                                                                           & 252  & 312  \\ \hline
-obo        & Ontology for Biomedical Investi.                                                                & 5\,374 & 296  \\ \hline
-ceo        & CEO: Consumer Electronics Ont.                                                                  & 49   & 285  \\ \hline
-lexinfo    & LexInfo                                                                                         & 279  & 275  \\ \hline
-odrl       & ODRL Version 2.2                                                                                & 45   & 239  \\ \hline
-aos        & Sex, Genders, Preferences and                                                                   & 39   & 237  \\ \hline
-topo       & An ontology for describing terri.                                                               & 52   & 226  \\ \hline
-jup        & Ontology of Building Accessib.                                                                  & 48   & 206  \\ \hline
-geosp      & GeoSpecies Ontology                                                                             & 86   & 204  \\ \hline
-vin        & Wine Ontology                                                                                   & 101  & 161  \\ \hline
-cbo        & Comic Book Ontology                                                                             & 68   & 138  \\ \hline
-sw-quality & SQuAP Ontology                                                                                  & 153  & 135  \\ \hline
-%uby        & ubyCat.owl                                                                                      & 53   & 134  \\ \hline
-%pmovn      & Predicate Model for Ontologies                                                                  & 53   & 133  \\ \hline
-%modsci     & ModSci, Modern Science Ontology                                                                 & 244  & 130  \\ \hline
-%scoro      & Scholarly Contributions and Roles                                                               & 20   & 125  \\ \hline
-%schema     & Schema.org vocabulary                                                                           & 625  & 124  \\ \hline
-%chord      & The Chord Ontology                                                                              & 9    & 108  \\ \hline
-%turismo    & Ontology of Tourist for Saragossa town hall.                                                    & 51   & 102  \\ \hline
-%rsctx      & Recommender System Context                                                                      & 52   & 91   \\ \hline
-%ddesc      & Denotative Description Ontology (ArCo network)                                                  & 66   & 91   \\ \hline
-%citof      & CiTOFunction                                                                                    & 6    & 84   \\ \hline
-%sh         & W3C Shapes Constraint Language (SHACL) Vocabulary                                               & 40   & 79   \\ \hline
-%s4watr     & SAREF extension for water                                                                       & 72   & 78   \\ \hline
-%gold       & General Ontology for Linguistic Description                                                     & 502  & 76   \\ \hline
-%voag       & Vocabulary Of Attribution and Governance                                                        & 65   & 76   \\ \hline
-%iot-tta    & Ontology for Internet of Things Technologies, Tools, and Applications                           & 152  & 76   \\ \hline
-%pext       & Proton Ontology                                                                                 & 488  & 72   \\ \hline
-%mv         & MobiVoc: Open Mobility Vocabulary                                                               & 38   & 68   \\ \hline
-%sdmx-code  & SDMX Code                                                                                       & 9    & 66   
+\textbf{Prefix} & \textbf{Label}                                 & \textbf{Class} & \textbf{Inst.} \\ \hline
+losp       & Linked open specialities RF                         & 6              & 2\,009 \\ \hline
+cfp        & Climate and Forecast standard                       & 48             & 1\,972 \\ \hline
+cff        & Climate and Forecast features                       & 48             & 1\,666 \\ \hline
+oum        & Ontology of units of Measure                        & 1\,078         & 1\,601 \\ \hline
+ifc        & IFC4\_ADD1                                          & 1\,395         & 1\,155 \\ \hline
+cwrc       & The CWRC Ontology                                   & 124            & 823  \\ \hline
+gn         & The Geonames ontology                               & 7              & 699  \\ \hline
+ids        & IDS Information Model                               & 290            & 675  \\ \hline
+mil        & The Muninn Military Ontology                        & 142            & 667  \\ \hline
+semsur     & SemSur, Version 2.0                                 & 3\,890         & 329  \\ \hline
+common     & The Delivery Context Ontology                       & 150            & 314  \\ \hline
+geop       & Geopolitical Ontology                               & 11             & 312  \\ \hline
+uniprot    & Uniprot Core Ontology                               & 252            & 312  \\ \hline
+obo        & Ontology for Biomedical Investi.                    & 5\,374         & 296  \\ \hline
+%ceo        & CEO: Consumer Electronics Ont.                      & 49             & 285  \\ \hline
+%lexinfo    & LexInfo                                             & 279            & 275  \\ \hline
+%odrl       & ODRL Version 2.2                                    & 45             & 239  \\ \hline
+%aos        & Sex, Genders, Preferences and                       & 39             & 237  \\ \hline
+%topo       & An ontology for describing terri.                   & 52             & 226  \\ \hline
+%jup        & Ontology of Building Accessib.                     & 48             & 206  \\ \hline
+%geosp      & GeoSpecies Ontology                                & 86             & 204  \\ \hline
+%vin        & Wine Ontology                                      & 101            & 161  \\ \hline
+%cbo        & Comic Book Ontology                                & 68             & 138  \\ \hline
+%sw-quality & SQuAP Ontology                                     & 153            & 135  \\ \hline
+%uby        & ubyCat.owl                                         & 53             & 134  \\ \hline
+%pmovn      & Predicate Model for Ontologies                     & 53             & 133  \\ \hline
+%modsci     & ModSci, Modern Science Ontology                    & 244            & 130  \\ \hline
+%scoro      & Scholarly Contributions and Roles                  & 20             & 125  \\ \hline
+%schema     & Schema.org vocabulary                              & 625            & 124  \\ \hline
+%chord      & The Chord Ontology                                 & 9              & 108  \\ \hline
+%turismo    & Ontology of Tourist for Saragossa town hall.       & 51             & 102  \\ \hline
+%rsctx      & Recommender System Context                         & 52             & 91   \\ \hline
+%ddesc      & Denotative Description Ontology (ArCo network)     & 66             & 91   \\ \hline
+%citof      & CiTOFunction                                       & 6              & 84   \\ \hline
+%sh         & W3C Shapes Constraint Language (SHACL) Vocabulary  & 40             & 79   \\ \hline
+%s4watr     & SAREF extension for water                          & 72             & 78   \\ \hline
+%gold       & General Ontology for Linguistic Description        & 502            & 76   \\ \hline
+%voag       & Vocabulary Of Attribution and Governance           & 65             & 76   \\ \hline
+%iot-tta    & Ontology for Internet of Things Technologies, Too  & 152            & 76   \\ \hline
+%pext       & Proton Ontology                                    & 488            & 72   \\ \hline
+%mv         & MobiVoc: Open Mobility Vocabulary                  & 38             & 68   \\ \hline
+%sdmx-code  & SDMX Code                                          & 9              & 66   
 \end{tabular}
 \caption{Q1 sample result (formatted)} \label{tab:q1-results}.
 %\vspace{-6mm}
@@ -168,14 +168,10 @@ SELECT DISTINCT ?i (BOUND(?sc) AS ?bsc)
 FROM <${vocab}>
 WHERE {
   ?i a <${class}> .
-  OPTIONAL {
-    BIND(skos:Concept AS ?sc) .
-    ?i a ?sc .
-  }
-  OPTIONAL {
-    ?i skos:inScheme ?scs .
-    ?scs a skos:ConceptScheme .
-  }
+  OPTIONAL { BIND(skos:Concept AS ?sc) .
+             ?i a ?sc . }
+  OPTIONAL { ?i skos:inScheme ?scs .
+             ?scs a skos:ConceptScheme . }
 }
 \end{lstlisting}
 
@@ -200,6 +196,9 @@ mil:1AIFRankMajor         & Yes                    & No                         
 mil:1AIFRankSapper        & Yes                    & No                           \\ \hline
 mil:1AIFRankSignaller     & Yes                    & No                           \\ \hline
 mil:1AIFRankLieutenant    & Yes                    & No                           \\ \hline
+mil:1AIFRankAirMechanic   & Yes                    & No                           \\ \hline
+mil:1AIFRankAbleSeaman    & Yes                    & No                           \\ \hline
+mil:1AIFRankBombardier    & Yes                    & No                           \\ \hline
 \end{tabular}
 \caption{Q3 sample result for class \textit{mil:Soldier} in the Military ontology (formatted)} \label{tab:q3-results}
 %\vspace{-6mm}
@@ -308,11 +307,9 @@ FROM <${vocab}> WHERE {
 
 \subsection{Implementation: Code List Analyzer}
 
-To make the process of browsing candidate code lists simpler, we have implemented a web application called Code List Analyzer, which uses these queries in our workflow to enable more comprehensive analysis and to provide empirical insight into the queried data.
+To make the process of browsing candidate code lists more user-oriented, we have created a web application called Code List Analyzer, which implements the SPARQL queries in our workflow to enable more comprehensive analysis and to provide empirical insight into the queried data. The source code of this application is available on our GitHub\footnote{\label{github-repo}\url{https://github.com/nvbach91/iga-hybrid}} repository under an open-source license. The web client of Code List Analyzer is accessible online via the following link: \url{https://fcp.vse.cz/iga-hybrid}.
 
-The source code of our project is available on GitHub\footnote{\label{github-repo}\url{https://github.com/nvbach91/iga-hybrid}} under an open-source license. The web client Code List Analyzer is accessible online via the following link: \url{https://fcp.vse.cz/iga-hybrid}.
-
-\subsection{Results}
+\subsection{Exploration results}
 
 The above sequence of SPARQL queries Q1 through Q5 is implemented in our Code List Analyzer tool and has been successfully executed on a total of 818 LOV vocabularies. % (that have at least one class instance). 
 We have discovered in aggregation\footnote{\url{https://github.com/nvbach91/iga-hybrid/tree/master/aggregate} (includes scripts to reproduce the results)} that 567 vocabularies do not have any code lists embedded in them. %, probably because these vocabularies are small. 
@@ -325,7 +322,7 @@ The top vocabularies that have the highest number of candidate code lists and th
 \begin{tabular}{|l|r|l|}
 \hline
 \textbf{Vocab} & \textbf{CLists} & \textbf{SKOS} \\ \hline
-*add1     & 206         & No   \\ \hline
+ifc       & 206         & No   \\ \hline
 common    & 79          & No   \\ \hline
 obo       & 50          & No   \\ \hline
 cfp       & 48          & No   \\ \hline
@@ -343,7 +340,7 @@ geosp     & 24          & No   \\ \hline
 aos       & 24          & No   \\ \hline
 voag      & 22          & No   \\ \hline
 gc        & 22          & No   \\ \hline
-...       & ...         & ...   \\ \hline
+%...       & ...         & ...   \\ \hline
 %uby       & 20          & No   \\ \hline
 %cwrc      & 19          & Yes  \\ \hline
 %bevon     & 18          & No   \\ \hline
@@ -377,7 +374,7 @@ losp           & 2009 & No  \\ \hline
 cfp            & 1974 & No  \\ \hline
 oum            & 1852 & No  \\ \hline
 cff            & 1668 & No  \\ \hline
-*add1          & 1627 & No  \\ \hline
+ifc            & 1627 & No  \\ \hline
 semsur         & 1158 & No  \\ \hline
 cwrc           & 837  & Yes \\ \hline
 mil            & 728  & Yes \\ \hline
@@ -391,7 +388,7 @@ common         & 349  & No  \\ \hline
 geop           & 312  & No  \\ \hline
 obo            & 304  & No  \\ \hline
 ceo            & 285  & No  \\ \hline
-...            & ...  & ... \\ \hline
+%...            & ...  & ... \\ \hline
 %aos            & 242  & No  \\ \hline
 %topo           & 233  & Yes \\ \hline
 %vin       & 39  & 161  & No  \\ \hline
@@ -437,7 +434,6 @@ Vocabularies                                                & 818            \\ 
 Vocabularies using SKOS                                     & 16             \\ \hline
 Vocabularies with candidate code lists                      & 251            \\ \hline
 Vocabularies without candidate code lists                   & 567            \\ \hline
-Vocabularies with codes                                     & 251            \\ \hline
 Vocabularies with assignment properties                     & 156            \\ \hline
 Vocabularies without assignment properties                  & 662            \\ \hline
 Candidate code lists                                        & 1\,690         \\ \hline
@@ -451,11 +447,11 @@ Candidate code lists without assignment properties          & 908            \\ 
 
 \subsection{Complexity of the process}
 
-The overall query complexity of this SPARQL query sequence can be calculated by multiplying the number of vocabularies, the number of classes, and the number of instances, since we must repeat the queries that retrieve the instances for each class in each vocabulary. The real-world run-time complexity depends on the database storage implementation. In our case, we directly query against the LOV endpoint, which is powered by the Jena Fuseki triplestore \cite{DBLP:journals/semweb/VandenbusscheAP17}. %, this means that the query speed of Code List Analyzer depends on the query endpoint of LOV. In any case, 
+The overall query complexity of the above SPARQL query sequence can be calculated by multiplying the number of vocabularies, the number of classes, and the number of instances, since we must repeat the queries that retrieve the instances for each class in each vocabulary. The real-world run-time complexity depends on the database storage implementation. In our case, we directly query against the LOV endpoint, which is powered by the Jena Fuseki triplestore \cite{DBLP:journals/semweb/VandenbusscheAP17}. %, this means that the query speed of Code List Analyzer depends on the query endpoint of LOV. In any case, 
 LOV also offers data dump in N-Quads format. This data can be uploaded to a triplestore and its SPARQL endpoint can be run on a local machine or a private server. For our analysis and querying purposes, we have set up a Blazegraph\footnote{\url{https://github.com/blazegraph/database}} SPARQL endpoint\cref{github-repo} with the LOV data dump to avoid query-spamming the official LOV server.
 
 Considering pattern matching in SPARQL has $\mathcal{O}(\log{}n)$ complexity, the query Q1 should have $\mathcal{O}(n\log{}n)$ complexity to create a list of vocabularies, however, we also calculate here the number of classes and class instances, the complexity becomes $\mathcal{O}(n^3)$. Since query Q2 also retrieves classes and instances, but depending on the Q1 results (the vocabulary IRI is a parameter of Q2), it will have $\mathcal{O}(n^2)$ complexity. Because of high complexity, these SPARQL queries cannot be combined and must run separately. Therefore, in order to browse the candidate code lists, the users must first select a vocabulary, while having the option to look at the number of class instances, and then select a candidate code list to view the codes.
 
-\subsection{Result visualization}
+\subsection{Exploration result visualization}
 
 In our implementation of Code List Analyzer, which can perform these tasks in a semi-automated manner, we have also included WebVOWL \cite{DBLP:journals/semweb/LohmannNHE15} -- an ontology visualization library. The graph visualization helps in obtaining quick insights while viewing the structures of the extracted candidate code lists, especially the relationships between the codes since they are hard to see in tables. We observed that most of the code lists have a flat structure with one class and many individuals on the same instance level as in Figure~\ref{fig:code-list-visualized}.

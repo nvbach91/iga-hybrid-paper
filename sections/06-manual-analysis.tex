@@ -10,9 +10,9 @@
 
 As we discussed in the previous section, the appearance of individuals in ontologies may indicate that the designers wished to refer to domain-relevant concepts without having to express them via classes (and at the same time did not want to hold them in a separate instance-level knowledge graph).
 However, the syntactic status of an ontology-embedded individual might not necessarily be a guarantee of its relevance for a code list. 
-In Section~\ref{ss:def_patt} we already mentioned multiple potential reasons for introducing individuals in ontologies, with varying degree of relevance for the code list setting.
-The queries from Section~\ref{s:codelistanalyzer}, implemented in Code List Analyzer, were driven by heuristics on what \emph{is} a candidate code list structure, and allowed to manually inspect the \emph{precision} of these heuristics.
-However, the cases not corresponding to those heuristics, were not retrieved; the presence of false negatives in the queries might then lead to worsened \emph{recall}. 
+In Section~\ref{ss:def_patt} we already mentioned multiple potential reasons for introducing individuals in ontologies, with varying degrees of relevance for the code list setting.
+The queries from Section~\ref{s:codelistanalyzer}, implemented in Code List Analyzer, was driven by heuristics on what \emph{is} a candidate code list structure, and allowed to manually inspect the \emph{precision} of these heuristics.
+However, the cases not corresponding to those heuristics were not retrieved; the presence of false negatives in the queries might then lead to worsened \emph{recall}. 
 Since the overall amount of individuals detected in ontologies is not overwhelming, we decided to proceed to their exhaustive analysis, using a dimensional model in which their distribution can be well visualized.
 This way, the adequacy of the current Code List Analyzer queries can be, to some degree, evaluated. 
 
@@ -63,52 +63,44 @@ pproc:AdministrativeInformation         & http://contsem.unizar.es/def/sector-pu
 
 The algorithm for retrieving all relevant data is straightforward. First, we run a query (Code listing \ref{lst:sparql11}) to get a list of all vocabularies and their namespaces in LOV:
 
-\begin{lstlisting}[captionpos=b, caption=Query to retrieve all ontologies and their namespaces,label=lst:sparql11,basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[captionpos=b, caption=Query to retrieve all ontologies and their namespaces,label=lst:sparql11,basicstyle=\small\ttfamily,frame=single]
 SELECT * WHERE {
   ?o a owl:Ontology .
-  OPTIONAL { 
-    ?o vann:preferredNamespaceUri ?ns . 
+  OPTIONAL { ?o vann:preferredNamespaceUri ?ns }
+}
+\end{lstlisting}
+
+And then for each ontology, we have a query (Code listing \ref{lst:sparql11}) to find class instances and entities, which are part of a \textit{skos:ConceptScheme}:
+
+\begin{lstlisting}[captionpos=b, caption=Query to retrieve all class instances and skos:ConceptScheme members,label=lst:sparql12,basicstyle=\small\ttfamily,frame=single]
+SELECT DISTINCT ?i FROM <${vocab}> WHERE {
+  {
+    VALUES ?class { owl:Class rdfs:Class }
+    ?c a ?class .
+    ?i a ?c .
   }
+  UNION { ?i skos:inScheme ?s }
 }
 \end{lstlisting}
 
-And then for each ontology we have a query (Code listing \ref{lst:sparql11}) to find class instances and entities, which are part of a \textit{skos:ConceptScheme}:
+Next, we query for the rest of the predefined attributes for each instance using the query in Code listing \ref{lst:sparql13}, where several generic meta-level classes are ignored:
 
-\begin{lstlisting}[captionpos=b, caption=Query to retrieve all class instances and skos:ConceptScheme members,label=lst:sparql12,basicstyle=\ttfamily,frame=single]
-SELECT DISTINCT ?i
-FROM <${ontology}>
-WHERE {
- {
-  VALUES ?class { owl:Class rdfs:Class }
-  ?c a ?class .
-  ?i a ?c .
- }
- UNION {
-  ?i skos:inScheme ?s .
- }
-}
-\end{lstlisting}
-
-Next, we query for the rest of the predefined attributes for each instance using the query in Code listing \ref{lst:sparql13}, where several generic meta classes are ignored:
-
-\begin{lstlisting}[captionpos=b, caption=Query to retrieve all class instances and skos:ConceptScheme members,label=lst:sparql13,basicstyle=\ttfamily,frame=single]
-SELECT DISTINCT ?c ?s
-FROM <${ontology}>
-WHERE {
- {
-  <${instance}> a ?c .
-  FILTER(?c NOT IN (
-   owl:Class, rdfs:Class,
-   owl:DeprecatedClass, owl:Thing, 
-   owl:ObjectProperty, owl:OntologyProperty,
-   owl:DatatypeProperty, owl:NamedIndividual,
-   owl:AnnotationProperty, owl:Ontology,
-   rdfs:Resource, rdfs:Datatype,
-   rdf:Property, voaf:Vocabulary, 
-   skos:ConceptScheme
-  ))
- }
- UNION { <${instance}> skos:inScheme ?s . }
+\begin{lstlisting}[captionpos=b, caption=Query to retrieve all class instances and skos:ConceptScheme members,label=lst:sparql13,basicstyle=\small\ttfamily,frame=single]
+SELECT DISTINCT ?c ?s FROM <${vocab}> WHERE {
+  {
+    <${instance}> a ?c .
+    FILTER(?c NOT IN (
+      owl:Class, rdfs:Class,
+      owl:DeprecatedClass, owl:Thing, 
+      owl:ObjectProperty, owl:OntologyProperty,
+      owl:DatatypeProperty, owl:NamedIndividual,
+      owl:AnnotationProperty, owl:Ontology,
+      rdfs:Resource, rdfs:Datatype,
+      rdf:Property, voaf:Vocabulary, 
+      skos:ConceptScheme
+   ))
+  }
+  UNION { <${instance}> skos:inScheme ?s }
 }
 \end{lstlisting}
 
@@ -117,7 +109,7 @@ we implement these queries and consolidate the result data to a final table %\fo
 (examples in Table \ref{tab:manual-analysis}) which can be used to inspect the instances with all necessary attributes. This script also takes care of computing derived values (such as the column that contains the instance namespaces) for evaluation purposes and analysis. We expect to incorporate the aspect of comparing ontology namespace and instance namespace to our extraction query sequence in Section \ref{s:codelistanalyzer}. This additional information, as one of the results of the dimensional analysis, would help to better decide whether a particular candidate code list is in fact a code list during the querying and evaluation process.
 
 
-Using the querying procedure above, we have retrieved a total of 21102 instances together with these attributes and aggregated them into the analysis dimensions in Figure \ref{fig:cube-aggregation} where we also show the number of instances in each case where the highest number of instances 11198 belongs to the case \textit{has a class}, \textit{is not SKOS} and \textit{is in ontology namespace}. The data and the code to reproduce these results can be found once more in our GitHub repository\footnote{\url{https://github.com/nvbach91/iga-hybrid/tree/master/cube-analysis} (includes scripts to reproduce results)}.
+Using the querying procedure above, we have retrieved a total of 21\,102 instances together with these attributes and aggregated them into the analysis dimensions in Figure \ref{fig:cube-aggregation} where we also show the number of instances in each case where the highest number of instances 11\,198 belongs to the case \textit{has a class}, \textit{is not SKOS} and \textit{is in ontology namespace}. The data and the code to reproduce these results can be found once more in our GitHub repository\footnote{\url{https://github.com/nvbach91/iga-hybrid/tree/master/cube-analysis} (includes scripts to reproduce results)}.
 
 \begin{figure}[ht]
     \centering
